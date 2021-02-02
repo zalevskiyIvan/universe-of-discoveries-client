@@ -1,0 +1,46 @@
+.fullProject{
+    display: grid;
+    width: 90%;
+    margin-left: 10%; 
+    grid-template-columns: 25% 30% 30%;
+    grid-template-rows: 0.4fr 1fr 1fr 1fr 0.4fr 0.1fr;
+    grid-gap: 10px;
+    font-size: 19px;
+    margin-top: 2%;
+    margin-bottom: 10px;
+}
+.headers{
+    display: flex;
+    justify-content: center;
+}
+.members, .purpose, .tasks, .relevance, .results, .conclusions, .header{
+    background-color: #eeeeee;
+    padding-left: 10px;
+}
+.header{
+    display: flex;
+    justify-content: center;
+    grid-column: 1/4;
+}
+ .members{
+    grid-row: 2/2;
+}
+.purpose{
+    grid-column: 2/ span 2;
+    grid-row: 2/2;
+    
+} 
+.tasks{
+    grid-row: 3/span 2;
+}
+.relevance{
+    grid-row: 3/ 3;
+    grid-column: 2/ span 2;
+}
+.results{
+    grid-column: 2/ span 2;
+}
+.conclusions{
+    grid-column: 1/ span 3;
+}
+

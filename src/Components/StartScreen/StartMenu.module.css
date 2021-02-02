@@ -1,0 +1,86 @@
+
+
+.world_ar{
+    display: flex;
+    justify-content: center;
+    font-size: 70px;
+    color: rgb(214, 214, 214);
+    animation-duration: 4s,3s;
+    animation-delay: 1s, 3s;
+    animation-fill-mode: both;
+    animation-name: fadeIn, margener;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif
+}
+.quot{
+    display: flex;
+    justify-content: center;
+    color: rgb(214, 214, 214);
+    animation-duration: 4s;
+    animation-fill-mode: both, both;
+    animation-name: fadeIn;
+    animation-delay: 2s;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: 15px;
+    margin-bottom: 20px;
+}
+.radio{
+    display: flex;
+    justify-content: center;
+    margin-top: 80px;
+    animation-duration: 3s;
+    animation-fill-mode: both;
+    animation-name: radioOpacity;
+    animation-delay: 6s;
+    color: rgb(214, 214, 214);
+    z-index: 1;
+}
+.radioText{
+    color: rgb(136, 136, 136);
+}
+.password{
+    animation-duration: 2s;
+    animation-fill-mode: both;
+    animation-name: fadeIn
+}
+.continue{
+    display: flex;
+    justify-content: center;
+    /* margin-left: 45%; */
+ 
+    animation-duration: 2s;
+    animation-fill-mode: both;
+    animation-name: fadeIn, margener
+}
+    @keyframes fadeIn {
+    0% {opacity: 0;}
+    100% {opacity: 1;}
+    }
+    @keyframes margener{
+        0%{padding-top:200px;}
+        100%{padding-top:50px;}
+    }
+    @keyframes radioOpacity{
+        0% {opacity: 0;}
+        100% {opacity: 1;}
+    }
+
+@media(max-width: 565px){
+    .quot{
+        display: none
+    }
+}
+@media(max-width: 500px){
+    .world_ar{
+        font-size: 60px;
+    }
+}
+@media(max-width: 400px){
+    .world_ar{
+        font-size: 45px;
+    }
+}
+@media(max-width: 300px){
+    .world_ar{
+        font-size: 40px;
+    }
+}
