@@ -9,7 +9,7 @@ import {
 import "antd/dist/antd.css";
 import "./App.css";
 import StartScreen from "./Components/StartScreen/StartScreen";
-import MainPage from "./Components/ChoiseSubject/MainPage";
+import SubjectMenu from "./Components/ChoiseSubject/SubjectMenu";
 import PageMenu from "./Components/PageMenu/PageMenu";
 import Admins from "./Components/Admins/Admins";
 import Menu from "./Components/TopMenu/TopMenu";
@@ -79,7 +79,7 @@ const App = () => {
               </div>
             )}
           />
-          <Route path="/menu" exact render={() => <MainPage />} />
+          <Route path="/menu" exact render={() => <SubjectMenu />} />
           <Route path="/:subject" render={() => <PageMenu />} />
           <Route path="/" exact render={() => <StartScreen />} />
         </Switch>
