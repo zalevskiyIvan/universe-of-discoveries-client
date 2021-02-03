@@ -1,135 +1,141 @@
-.eventContainer{
-    margin-left: 5%;
-    width: 90%;
-    background-repeat: no-repeat;
-    background-size: inherit;
-    border-radius: 16px;
-    padding-bottom: 1px;
-    margin-bottom: 5%;
-    background-color: #eeeeee;
+.eventContainer {
+  margin-left: 5%;
+  width: 90%;
+  background-repeat: no-repeat;
+  background-size: inherit;
+  border-radius: 16px;
+  padding-bottom: 1px;
+  margin-bottom: 5%;
+  background-color: #eeeeee;
 }
-.eventContainer:hover{
-    background-color: white;
+.eventContainer:hover {
+  background-color: white;
 }
-.delete{
-    color: black;
-    font-size: 40px;
-    margin-left: 95%;
-    cursor: pointer;
+.delete {
+  color: black;
+  font-size: 40px;
+  margin-left: 95%;
+  cursor: pointer;
 }
-.body{
-    font-size: 28px;
-    margin-left: 2%;
-    font-family: 'Courier New', Courier, monospace;
+.body {
+  font-size: 28px;
+  margin-left: 2%;
+  font-family: "Courier New", Courier, monospace;
 }
-.header{
-    display: flex;
-    justify-content: center;
-    cursor: pointer;
-    font-family:'Courier New', Courier, monospace;
-    font-size: 60px;
-    padding-top: 10px;
+.header {
+  display: flex;
+  justify-content: center;
+  cursor: pointer;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 60px;
+  padding-top: 10px;
 }
-.createProject{
-    height: 1%;
-    width: 15%;
-    font-size: 23px;
-    margin-left: 40%;
-    margin-bottom: 2%;
+.createProject {
+  height: 1%;
+  width: 15%;
+  font-size: 23px;
+  margin-left: 40%;
+  margin-bottom: 2%;
 }
-.filter{
-    width: 40%;
-    margin-left: 27%;
+.filter {
+  width: 40%;
+  margin-left: 27%;
 }
-.pagination{
-    display: flex;
-    margin-left: 6%;
-    padding-bottom: 2%;
-    width: 88%;
+.pagination {
+  display: flex;
+  margin-left: 6%;
+  padding-bottom: 2%;
+  width: 88%;
 }
-.rightButton{
-    margin-left: 95%;
+.rightButton {
+  margin-left: 95%;
 }
 
-img{
-    width: 60%;
-    margin-left: 10%;
-    margin-bottom: 2%;
-    }
-@media(max-width: 1000px){
-    .header{
-        font-size: 35px;
-    }
-    .body{
-        font-size: 26px;
-    }
+img {
+  width: 60%;
+  margin-left: 10%;
+  margin-bottom: 2%;
 }
-@media(max-width: 925px){
-.createProject{
+@media (max-width: 1000px) {
+  .header {
+    font-size: 35px;
+  }
+  .body {
+    font-size: 26px;
+  }
+}
+@media (max-width: 925px) {
+  .createProject {
+    font-size: 17px;
+  }
+  .delete {
+    margin-left: 90%;
+  }
+}
+@media (max-width: 730px) {
+  .header {
+    font-size: 40px;
+    /* margin-left: 30%; */
+  }
+  .body {
+    margin-left: 4%;
     font-size: 20px;
+  }
+  .eventContainer {
+    margin-left: 3%;
+  }
+  .pagination {
+    width: 80%;
+  }
+  .createProject {
+    font-size: 15px;
+    margin-bottom: 3%;
+  }
 }
+@media (max-width: 580px) {
+  .createProject {
+    font-size: 15px;
+    width: 25%;
+    margin-left: 35%;
+  }
 }
-@media(max-width: 730px){
-    .header{
-        font-size: 40px;
-        /* margin-left: 30%; */
-    }
-    .body{
-        margin-left: 4%;
-        font-size: 20px;
-    }
-    .eventContainer{
-        margin-left: 3%;
-    }
-    .pagination{
-        width: 80%;
-    }
-    .createProject{
-        font-size: 15px;
-        margin-bottom: 3%;
-    }
+@media (max-width: 475px) {
+  .header {
+    font-size: 27px;
+  }
+  .body {
+    margin-left: 4%;
+    font-size: 20px;
+  }
+  .eventContainer {
+    margin-left: 5%;
+  }
+  .delete {
+    margin-left: 85%;
+  }
 }
- @media(max-width: 580px){
-    .createProject{
-        font-size: 15px;
-        width: 25%;
-        margin-left: 35%;
-    }
-    } 
- @media(max-width: 475px){
-    .header{
-        font-size: 27px;
-    }
-    .body{
-        margin-left: 4%;
-        font-size: 20px;
-    }
-    .eventContainer{
-        margin-left: 5%;
-    }
-} 
- @media(max-width: 450px){
-    .header{
-        font-size: 23px;
-    }
-    .body{
-        margin-left: 4%;
-        font-size: 18px;
-    }
-    .eventContainer{
-        margin-left: 4%;
-    }
-    .pagination{
-        width: 75%;
-    }
-    .filter{
-        width: 60%;
-        margin-left: 16%;
-    }
-    .createProject{
-        width: 34%;
-        margin-left: 30%;
-        margin-bottom: 7%;
-        margin-top: -50px;
-    }
-} 
+@media (max-width: 450px) {
+  .header {
+    font-size: 23px;
+  }
+  .body {
+    margin-left: 4%;
+    font-size: 18px;
+  }
+  .eventContainer {
+    margin-left: 4%;
+  }
+  .pagination {
+    width: 75%;
+  }
+  .filter {
+    width: 60%;
+    margin-left: 16%;
+  }
+  .createProject {
+    width: 34%;
+    margin-left: 30%;
+    margin-bottom: 7%;
+    margin-top: -50px;
+  }
+}
