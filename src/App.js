@@ -9,7 +9,7 @@ import {
 import "antd/dist/antd.css";
 import "./App.css";
 import StartScreen from "./Components/StartScreen/StartScreen";
-import SubjectMenu from "./Components/ChoiseSubject/SubjectMenu";
+import SubjectMenu from "./Components/ChoiseSubject/MainPage";
 import PageMenu from "./Components/PageMenu/PageMenu";
 import Admins from "./Components/Admins/Admins";
 import Menu from "./Components/TopMenu/TopMenu";
