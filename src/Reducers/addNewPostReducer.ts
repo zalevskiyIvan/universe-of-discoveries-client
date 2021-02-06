@@ -18,21 +18,6 @@ export type userfulLinksType = {
   description: string;
   _id?: number;
 };
-export type projectType = {
-  header: String;
-  purpose: String;
-  tasks: [String];
-  relevance: String;
-  conclusions: String;
-  results: String;
-  subject: String;
-  date: String;
-  // img: [{imgURL: String, id: Number}],
-  // presentationHtml: String,
-  shortDescription: String;
-  members: [String];
-  _id?: string;
-};
 const initianState = {
   events: [] as Array<arrType>,
   tasks: [] as Array<arrType>,
@@ -83,11 +68,11 @@ const addPostReducer = (
         ...state,
         projects: action.part,
       };
-    case "CLEAR_FULL_PROJECT":
-      debugger;
+    case "CLEAR":
       return {
         ...state,
         projects: [],
+        shortProjects: [],
       };
     case "GET_USEFUL_LINK":
       return {
@@ -118,7 +103,7 @@ export const actions = {
   getFullProjectAC: (projectArr: Array<any>) =>
     ({ type: "GET_FULL_PROJECT", part: projectArr } as const),
   //
-  clearFullProject: () => ({ type: "CLEAR_FULL_PROJECT" } as const),
+  clear: () => ({ type: "CLEAR" } as const),
   //
   getUsefulLinkAC: (linksArr: Array<userfulLinksType>) =>
     ({ type: "GET_USEFUL_LINK", part: linksArr } as const),
@@ -139,8 +124,9 @@ export const addEventT = (
 };
 
 export const getEventT = (page: number) => {
-  const klass = localStorage.klass;
+  let klass = localStorage.klass;
   const subject = localStorage.subject;
+  if (!klass) klass = 0;
   return (dispatch: any) => {
     API.getEvent(klass, subject, page).then((res: any) => {
       dispatch(actions.getEventsAC(res.data));
@@ -181,8 +167,9 @@ export const addTaskT = (
 };
 
 export const getTaskT = (page: number) => {
-  const klass = localStorage.klass;
+  let klass = localStorage.klass;
   const subject = localStorage.subject;
+  if (!klass) klass = 0;
   return (dispatch: any) => {
     API.getTask(klass, subject, page).then((res: any) => {
       dispatch(actions.getTaskAC(res.data));
@@ -224,6 +211,23 @@ export const getUsefulLinkT = () => {
 
 //
 
+export type projectType = {
+  header: String;
+  purpose: String;
+  tasks: [String];
+  relevance: String;
+  conclusions: String;
+  results: String;
+  subject: String;
+  date: String;
+  // img: [{imgURL: String, id: Number}],
+  // presentationHtml: String,
+  shortDescription: String;
+  members: [String];
+  allowed: boolean;
+  _id?: string;
+};
+
 export const getShortProjectT = (page: number) => {
   const subject = localStorage.subject;
   return (dispatch: any) => {
@@ -240,10 +244,18 @@ export const deleteProjectT = (id: string) => {
   };
 };
 export const getShortProjectWithFilterT = (filter: string) => {
-  const klass = localStorage.klass;
   const subject = localStorage.subject;
   return (dispatch: any) => {
-    API.getProjectWithFilter(klass, subject, filter).then((res: any) => {
+    API.getProjectWithFilter(subject, filter).then((res: any) => {
+      dispatch(actions.getShortProjectAC(res.data));
+    });
+  };
+};
+
+export const getPendingProjectWithFilterT = (filter: string) => {
+  const subject = localStorage.subject;
+  return (dispatch: any) => {
+    API.getPendingProjectWithFilter(subject, filter).then((res: any) => {
       dispatch(actions.getShortProjectAC(res.data));
     });
   };
@@ -265,6 +277,23 @@ export const getProjectT = (id: number) => {
   return (dispatch: any) => {
     API.getProject(subject, id).then((res: any) => {
       dispatch(actions.getFullProjectAC(res.data));
+    });
+  };
+};
+
+export const getPendingProjectT = (page: number) => {
+  const subject = localStorage.subject;
+  return (dispatch: any) => {
+    API.getPendingProject(subject, page).then((res: any) => {
+      dispatch(actions.getShortProjectAC(res.data));
+    });
+  };
+};
+
+export const allowProjectT = (id: string) => {
+  return (dispatch: any) => {
+    API.allowProject(id).then(({ data }) => {
+      dispatch(actions.deleteProjectAC(data));
     });
   };
 };

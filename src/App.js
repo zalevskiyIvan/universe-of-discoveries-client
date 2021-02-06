@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  BrowserRouter,
-  Route,
-  Switch,
-  useHistory,
-  useLocation,
-} from "react-router-dom";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
 import "antd/dist/antd.css";
 import "./App.css";
 import StartScreen from "./Components/StartScreen/StartScreen";
@@ -19,6 +13,7 @@ import FullProject from "./Components/Project/FullProject";
 import CreateProject from "./Components/Project/CreateProject";
 import PostsRender from "./Components/PostsRender/PostsRender";
 import Logaut from "./Components/Logaut/Logaut";
+import CreatePost from "./Components/CreatePost/CreatePost";
 
 const App = () => {
   return (
@@ -29,9 +24,19 @@ const App = () => {
         </div>
         <Switch>
           <Route path="/:subject/project/:id" render={() => <FullProject />} />
+
           <Route
             path="/:subject/create-project"
             render={() => <CreateProject />}
+          />
+          <Route
+            path="/:subject/create"
+            render={() => (
+              <div>
+                <Menu />
+                <CreatePost />
+              </div>
+            )}
           />
           <Route path="/:subject/admins" render={() => <Admins />} />
           <Route
@@ -43,6 +48,7 @@ const App = () => {
               </div>
             )}
           />
+
           <Route
             path="/:subject/project"
             render={() => (
@@ -62,7 +68,7 @@ const App = () => {
             )}
           />
           <Route
-            path="/:subject/about"
+            path="/about"
             render={() => (
               <div>
                 <Menu />

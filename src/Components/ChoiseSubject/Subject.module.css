@@ -7,7 +7,7 @@
   grid-template-columns: 0fr 0fr 0fr;
   grid-gap: 1%;
   transform: rotate(-45deg);
-  margin-left: 26%;
+  margin-left: 23%;
   background-color: rgb(28, 29, 87);
 }
 .cube {

@@ -27,9 +27,9 @@ const Menu = () => {
     dispatch(getTaskT(1));
     history.push(`/${params.subject}/tasks`);
   };
-  const about = () => {
-    history.push(`/${params.subject}/about`);
-  };
+  // const about = () => {
+  //   history.push(`/${params.subject}/about`);
+  // };
   const subject = () => {
     history.push(`/menu`);
   };
@@ -52,11 +52,11 @@ const Menu = () => {
             Задания
           </span>
         </li>
-        <li className={style.li}>
+        {/* <li className={style.li}>
           <span onClick={about} className={style.a}>
             О нас
           </span>
-        </li>
+        </li> */}
         <li className={style.li}>
           <span onClick={links} className={style.a}>
             Полезные ссылки

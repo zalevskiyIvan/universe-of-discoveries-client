@@ -1,7 +1,8 @@
 import axios from "axios";
 
 const instanse = axios.create({
-  baseURL: "https://universe-of-discoveries.herokuapp.com/api/",
+  // baseURL: "https://universe-of-discoveries.herokuapp.com/api/",
+  baseURL: "http://localhost:3001/api/",
   headers: {
     "Access-Control-Allow-Origin": "*",
     "Content-Type": "application/json",
@@ -63,9 +64,22 @@ export const API = {
   deleteProject: (id: string) => {
     return instanse.delete(`short-projects?id=${id}`);
   },
-  getProjectWithFilter: (klass: string, subject: string, filter: string) => {
+  getProjectWithFilter: (subject: string, filter: string) => {
     return instanse.get(
       `filter-short-projects?&subject=${subject}&filter=${filter}`
+    );
+  },
+  getPendingProject: (subject: string, page: number) => {
+    return instanse.get(
+      `pending-short-projects?&subject=${subject}&page=${page}`
+    );
+  },
+  allowProject: (id: string) => {
+    return instanse.get(`allow-short-projects?&id=${id}`);
+  },
+  getPendingProjectWithFilter: (subject: string, filter: string) => {
+    return instanse.get(
+      `pending-filter-short-projects?&subject=${subject}&filter=${filter}`
     );
   },
 

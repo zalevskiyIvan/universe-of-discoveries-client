@@ -12,9 +12,12 @@
   background-color: white;
 }
 .delete {
+  margin-right: 7%;
+  padding-left: 80%;
+}
+.controllButton {
   color: black;
   font-size: 40px;
-  margin-left: 95%;
   cursor: pointer;
 }
 .body {
@@ -63,26 +66,28 @@ img {
   .body {
     font-size: 26px;
   }
+  .controllButton {
+    font-size: 30px;
+  }
 }
 @media (max-width: 925px) {
   .createProject {
     font-size: 17px;
   }
   .delete {
-    margin-left: 90%;
+    margin-left: 0%;
   }
 }
 @media (max-width: 730px) {
   .header {
     font-size: 40px;
-    /* margin-left: 30%; */
   }
   .body {
     margin-left: 4%;
     font-size: 20px;
   }
   .eventContainer {
-    margin-left: 3%;
+    margin-left: 8%;
   }
   .pagination {
     width: 80%;
@@ -93,10 +98,16 @@ img {
   }
 }
 @media (max-width: 580px) {
+  .eventContainer {
+    margin-left: 7%;
+  }
   .createProject {
     font-size: 15px;
     width: 25%;
     margin-left: 35%;
+  }
+  .controllButton {
+    font-size: 15px;
   }
 }
 @media (max-width: 475px) {
@@ -109,9 +120,6 @@ img {
   }
   .eventContainer {
     margin-left: 5%;
-  }
-  .delete {
-    margin-left: 85%;
   }
 }
 @media (max-width: 450px) {

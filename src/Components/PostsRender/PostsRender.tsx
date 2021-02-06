@@ -4,13 +4,17 @@ import { useHistory } from "react-router-dom";
 import {
   getEventT,
   getTaskT,
-  getShortProjectT,
   getTaskWithFilterT,
   getShortProjectWithFilterT,
   getEventsWithFilterT,
   deleteEventT,
   deleteProjectT,
   deleteTaskT,
+  allowProjectT,
+  getPendingProjectT,
+  getShortProjectT,
+  actions,
+  getPendingProjectWithFilterT,
 } from "../../Reducers/addNewPostReducer";
 import style from "./PostsRender.module.css";
 import {
@@ -18,12 +22,15 @@ import {
   LeftOutlined,
   SearchOutlined,
   DeleteOutlined,
+  CheckOutlined,
 } from "@ant-design/icons";
 import { Button, Form, Input } from "antd";
 
 type propsType = {
   type: string;
+  pending: boolean;
 };
+
 const PostsRender: React.FC<propsType> = (props) => {
   const state = useSelector((state: any) => {
     switch (props.type) {
@@ -51,7 +58,10 @@ const PostsRender: React.FC<propsType> = (props) => {
   const back = () => {
     if (page !== 1) setPage(page - 1);
   };
-
+  const pageProject = () => {
+    if (props.pending) dispatch(getPendingProjectT(page));
+    if (!props.pending) dispatch(getShortProjectT(page));
+  };
   useEffect(() => {
     switch (props.type) {
       case "events":
@@ -61,21 +71,22 @@ const PostsRender: React.FC<propsType> = (props) => {
         dispatch(getTaskT(page));
         break;
       case "projects":
-        dispatch(getShortProjectT(page));
+        pageProject();
         break;
     }
   }, [page]);
+
   //posts:
-  const [addMode, setAddMode] = useState(false);
+  // const [addMode, setAddMode] = useState(false);
   const openAddPost = () => {
-    console.log("openAddPost");
-    setAddMode(true);
     const subject = localStorage.subject;
-    history.push(`/${subject}/create-project`);
+    if (props.type === "projects") history.push(`/${subject}/create-project`);
+    else history.push(`/${subject}/create/${props.type}`);
+    // setAddMode(true);
   };
+
   const [filterMod, setFilterMod] = useState(false);
-  const addFilter = (e: any) => {
-    console.log("addFilter");
+  const addFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.value) {
       switch (props.type) {
         case "tasks":
@@ -85,7 +96,9 @@ const PostsRender: React.FC<propsType> = (props) => {
           dispatch(getEventsWithFilterT(e.target.value));
           break;
         case "projects":
-          dispatch(getShortProjectWithFilterT(e.target.value));
+          if (props.pending) {
+            dispatch(getPendingProjectWithFilterT(e.target.value));
+          } else dispatch(getShortProjectWithFilterT(e.target.value));
           break;
       }
       setFilterMod(true);
@@ -98,13 +111,12 @@ const PostsRender: React.FC<propsType> = (props) => {
           dispatch(getTaskT(page));
           break;
         case "projects":
-          dispatch(getShortProjectT(page));
+          pageProject();
           break;
       }
     setFilterMod(false);
   };
   const deleteElement = (id: string) => {
-    console.log("deleteElement");
     switch (props.type) {
       case "events":
         dispatch(deleteEventT(id));
@@ -117,11 +129,17 @@ const PostsRender: React.FC<propsType> = (props) => {
         break;
     }
   };
+  const allowProject = (id: string) => {
+    dispatch(allowProjectT(id));
+    dispatch(actions.deleteProjectAC(id));
+  };
   return (
     <div>
-      {props.type === "projects" && (
+      {!props.pending && (
         <Button className={style.createProject} onClick={openAddPost}>
-          Создать проект
+          {props.type === "projects" && <span>Создать проект</span>}
+          {props.type === "tasks" && <span>Новое задание</span>}
+          {props.type === "events" && <span>Новое мероприятие</span>}
         </Button>
       )}
       <Input
@@ -149,13 +167,16 @@ const PostsRender: React.FC<propsType> = (props) => {
       {state.map((item: any) => {
         return (
           <div className={style.eventContainer} key={item._id}>
-            <div>
-              <h2 style={{ color: "black", marginLeft: 40 }}>{item.date}</h2>
+            <h2 style={{ color: "black", marginLeft: 40 }}>{item.date}</h2>
+            <div className={style.controllButton}>
               {localStorage.auth && (
                 <DeleteOutlined
                   className={style.delete}
                   onClick={() => deleteElement(item._id)}
                 />
+              )}
+              {props.pending && (
+                <CheckOutlined onClick={() => allowProject(item._id)} />
               )}
             </div>
             <div

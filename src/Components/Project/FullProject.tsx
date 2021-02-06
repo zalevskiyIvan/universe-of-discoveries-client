@@ -15,7 +15,7 @@ const FullProject = () => {
   useEffect(() => {
     dispatch(getProjectT(params.id));
     return () => {
-      dispatch(actions.clearFullProject());
+      dispatch(actions.clear());
     };
   }, []);
 

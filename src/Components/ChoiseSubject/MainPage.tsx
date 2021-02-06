@@ -53,6 +53,11 @@ const SubjectMenu = () => {
             <h1 className={style.text}>Информатика</h1>
           </div>
         </Link>
+        <Link to="/about">
+          <div className={style.cube}>
+            <h1 className={style.text}>О сайте</h1>
+          </div>
+        </Link>
       </div>
     </div>
   );
