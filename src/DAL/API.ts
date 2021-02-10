@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const instanse = axios.create({
-  baseURL: "https://universe-of-discoveries.herokuapp.com/api/",
+  baseURL: "https://universe-of-discoveries-server.herokuapp.com/api/",
   // baseURL: "http://localhost:3001/api/",
   headers: {
     "Access-Control-Allow-Origin": "*",
