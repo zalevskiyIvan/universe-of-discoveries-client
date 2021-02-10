@@ -15,7 +15,7 @@ const SubjectMenu = () => {
     localStorage.subject = "english";
   };
   const library = () => {
-    localStorage.subject = "libruary";
+    localStorage.subject = "math";
   };
   const art = () => {
     localStorage.subject = "art";
@@ -43,9 +43,9 @@ const SubjectMenu = () => {
             <h1 className={style.text}>Русский и литература</h1>
           </div>
         </Link>
-        <Link to="/libruary">
+        <Link to="/math">
           <div onClick={library} className={style.cube}>
-            <h1 className={style.text}>Библиотека</h1>
+            <h1 className={style.text}>Математика</h1>
           </div>
         </Link>
         <Link to="/informatics" className={style.inform}>
