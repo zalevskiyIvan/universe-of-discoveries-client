@@ -141,8 +141,9 @@ export const deleteEventT = (id: string) => {
   };
 };
 export const getEventsWithFilterT = (filter: string) => {
-  const klass = localStorage.klass;
+  let klass = localStorage.klass;
   const subject = localStorage.subject;
+  if (!klass) klass = 0;
   return (dispatch: any) => {
     API.getEventsWithFilter(klass, subject, filter).then((res: any) => {
       dispatch(actions.getEventsAC(res.data));
@@ -184,8 +185,9 @@ export const deleteTaskT = (id: string) => {
   };
 };
 export const getTaskWithFilterT = (filter: string) => {
-  const klass = localStorage.klass;
+  let klass = localStorage.klass;
   const subject = localStorage.subject;
+  if (!klass) klass = 0;
   return (dispatch: any) => {
     API.getTaskWithFilter(klass, subject, filter).then((res: any) => {
       dispatch(actions.getTaskAC(res.data));
