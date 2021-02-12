@@ -1,3 +1,5 @@
+import { Dispatch } from "react";
+import { useHistory } from "react-router-dom";
 import API from "../DAL/API";
 import { ActionTypes } from "../store";
 
@@ -24,6 +26,7 @@ const initianState = {
   shortProjects: [] as Array<arrType>,
   userfulLinks: [] as Array<userfulLinksType>,
   projects: [] as Array<any>,
+  statusCode: 0,
 };
 type stateType = typeof initianState;
 const addPostReducer = (
@@ -73,11 +76,18 @@ const addPostReducer = (
         ...state,
         projects: [],
         shortProjects: [],
+        events: [],
+        tasks: [],
       };
     case "GET_USEFUL_LINK":
       return {
         ...state,
         userfulLinks: action.part.reverse(),
+      };
+    case "INFO":
+      return {
+        ...state,
+        statusCode: action.statusCode,
       };
     default:
       return state;
@@ -105,6 +115,8 @@ export const actions = {
   //
   clear: () => ({ type: "CLEAR" } as const),
   //
+  statusCodeAC: (statusCode: number) => ({ type: "INFO", statusCode } as const),
+  //
   getUsefulLinkAC: (linksArr: Array<userfulLinksType>) =>
     ({ type: "GET_USEFUL_LINK", part: linksArr } as const),
 };
@@ -117,9 +129,12 @@ export const addEventT = (
 ) => {
   const date = new Date().toLocaleDateString();
   const subject = localStorage.subject;
-  return (dispatch: any) => {
+  return async (dispatch: any) => {
     const data = { klass, header, body, img, subject, date };
-    API.addNewEvent(data);
+    const res = await API.addNewEvent(data);
+    if (res.status == 205) {
+      dispatch(actions.statusCodeAC(res.status));
+    }
   };
 };
 
@@ -127,27 +142,27 @@ export const getEventT = (page: number) => {
   let klass = localStorage.klass;
   const subject = localStorage.subject;
   if (!klass) klass = 0;
-  return (dispatch: any) => {
-    API.getEvent(klass, subject, page).then((res: any) => {
-      dispatch(actions.getEventsAC(res.data));
-    });
+  return async (dispatch: any) => {
+    const res = await API.getEvent(klass, subject, page);
+    dispatch(actions.getEventsAC(res.data));
   };
 };
 export const deleteEventT = (id: string) => {
-  return (dispatch: any) => {
-    API.deleteEvent(id).then((res: any) => {
-      dispatch(actions.deleteEventsAC(res.data));
-    });
+  return async (dispatch: Dispatch<actionType>) => {
+    const res = await API.deleteEvent(id);
+    if (res.status == 205) {
+      dispatch(actions.statusCodeAC(res.status));
+    }
+    if (res.data) dispatch(actions.deleteEventsAC(res.data));
   };
 };
 export const getEventsWithFilterT = (filter: string) => {
   let klass = localStorage.klass;
   const subject = localStorage.subject;
   if (!klass) klass = 0;
-  return (dispatch: any) => {
-    API.getEventsWithFilter(klass, subject, filter).then((res: any) => {
-      dispatch(actions.getEventsAC(res.data));
-    });
+  return async (dispatch: Dispatch<actionType>) => {
+    const res = await API.getEventsWithFilter(klass, subject, filter);
+    dispatch(actions.getEventsAC(res.data));
   };
 };
 
@@ -161,9 +176,12 @@ export const addTaskT = (
 ) => {
   const date = new Date().toLocaleDateString();
   const subject = localStorage.subject;
-  return (dispatch: any) => {
+  return async (dispatch: Dispatch<actionType>) => {
     const data = { klass, header, body, img, subject, date };
-    API.addNewTask(data);
+    const res = await API.addNewTask(data);
+    if (res.status == 205) {
+      dispatch(actions.statusCodeAC(res.status));
+    }
   };
 };
 
@@ -171,43 +189,45 @@ export const getTaskT = (page: number) => {
   let klass = localStorage.klass;
   const subject = localStorage.subject;
   if (!klass) klass = 0;
-  return (dispatch: any) => {
-    API.getTask(klass, subject, page).then((res: any) => {
-      dispatch(actions.getTaskAC(res.data));
-    });
+  return async (dispatch: Dispatch<actionType>) => {
+    const res = await API.getTask(klass, subject, page);
+    dispatch(actions.getTaskAC(res.data));
   };
 };
 export const deleteTaskT = (id: string) => {
-  return (dispatch: any) => {
-    API.deleteTask(id).then((res: any) => {
-      dispatch(actions.deleteTaskAC(res.data));
-    });
+  return async (dispatch: Dispatch<actionType>) => {
+    const res = await API.deleteTask(id);
+    if (res.status == 205) {
+      dispatch(actions.statusCodeAC(res.status));
+    }
+    dispatch(actions.deleteTaskAC(res.data));
   };
 };
 export const getTaskWithFilterT = (filter: string) => {
   let klass = localStorage.klass;
   const subject = localStorage.subject;
   if (!klass) klass = 0;
-  return (dispatch: any) => {
-    API.getTaskWithFilter(klass, subject, filter).then((res: any) => {
-      dispatch(actions.getTaskAC(res.data));
-    });
+  return async (dispatch: Dispatch<actionType>) => {
+    const res = await API.getTaskWithFilter(klass, subject, filter);
+    dispatch(actions.getTaskAC(res.data));
   };
 };
 
 //
 
 export const addUsefulLinkT = (link: string, description: string) => {
-  return (dispatch: any) => {
-    API.addNewUsefulLink(link, description);
+  return async (dispatch: Dispatch<actionType>) => {
+    const res = await API.addNewUsefulLink(link, description);
+    if (res.status == 205) {
+      dispatch(actions.statusCodeAC(res.status));
+    }
   };
 };
 
 export const getUsefulLinkT = () => {
-  return (dispatch: any) => {
-    API.getUsefulLink().then((res: any) => {
-      dispatch(actions.getUsefulLinkAC(res.data));
-    });
+  return async (dispatch: Dispatch<actionType>) => {
+    const res = await API.getUsefulLink();
+    dispatch(actions.getUsefulLinkAC(res.data));
   };
 };
 
@@ -232,34 +252,36 @@ export type projectType = {
 
 export const getShortProjectT = (page: number) => {
   const subject = localStorage.subject;
-  return (dispatch: any) => {
-    API.getShortProject(subject, page).then((res: any) => {
-      dispatch(actions.getShortProjectAC(res.data));
-    });
+  return async (dispatch: any) => {
+    const res = await API.getShortProject(subject, page);
+    dispatch(actions.getShortProjectAC(res.data));
   };
 };
 export const deleteProjectT = (id: string) => {
-  return (dispatch: any) => {
-    API.deleteProject(id).then((res: any) => {
-      dispatch(actions.deleteProjectAC(res.data));
-    });
+  return async (dispatch: any) => {
+    const res = await API.deleteProject(id);
+    if (res.status == 205) {
+      dispatch(actions.statusCodeAC(res.status));
+    }
+    dispatch(actions.deleteProjectAC(res.data));
   };
 };
 export const getShortProjectWithFilterT = (filter: string) => {
   const subject = localStorage.subject;
-  return (dispatch: any) => {
-    API.getProjectWithFilter(subject, filter).then((res: any) => {
-      dispatch(actions.getShortProjectAC(res.data));
-    });
+  return async (dispatch: any) => {
+    const res = await API.getProjectWithFilter(subject, filter);
+    dispatch(actions.getShortProjectAC(res.data));
   };
 };
 
 export const getPendingProjectWithFilterT = (filter: string) => {
   const subject = localStorage.subject;
-  return (dispatch: any) => {
-    API.getPendingProjectWithFilter(subject, filter).then((res: any) => {
-      dispatch(actions.getShortProjectAC(res.data));
-    });
+  return async (dispatch: any) => {
+    const res = await API.getPendingProjectWithFilter(subject, filter);
+    if (res.status == 205) {
+      dispatch(actions.statusCodeAC(res.status));
+    }
+    dispatch(actions.getShortProjectAC(res.data));
   };
 };
 
@@ -269,34 +291,37 @@ export type imgArr = {
 };
 
 export const addProjectT = (data: projectType) => {
-  return (dispatch: any) => {
-    API.addProject(data);
+  return async (dispatch: any) => {
+    const res = await API.addProject(data);
   };
 };
 
 export const getProjectT = (id: number) => {
   const subject = localStorage.subject;
-  return (dispatch: any) => {
-    API.getProject(subject, id).then((res: any) => {
-      dispatch(actions.getFullProjectAC(res.data));
-    });
+  return async (dispatch: any) => {
+    const res = await API.getProject(subject, id);
+    dispatch(actions.getFullProjectAC(res.data));
   };
 };
 
 export const getPendingProjectT = (page: number) => {
   const subject = localStorage.subject;
-  return (dispatch: any) => {
-    API.getPendingProject(subject, page).then((res: any) => {
-      dispatch(actions.getShortProjectAC(res.data));
-    });
+  return async (dispatch: any) => {
+    const res = await API.getPendingProject(subject, page);
+    if (res.status == 205) {
+      dispatch(actions.statusCodeAC(res.status));
+    }
+    dispatch(actions.getShortProjectAC(res.data));
   };
 };
 
 export const allowProjectT = (id: string) => {
-  return (dispatch: any) => {
-    API.allowProject(id).then(({ data }) => {
-      dispatch(actions.deleteProjectAC(data));
-    });
+  return async (dispatch: any) => {
+    const res = await API.allowProject(id);
+    if (res.status == 205) {
+      dispatch(actions.statusCodeAC(res.status));
+    }
+    dispatch(actions.deleteProjectAC(res.data));
   };
 };
 

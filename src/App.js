@@ -30,7 +30,7 @@ const App = () => {
             render={() => <CreateProject />}
           />
           <Route
-            path="/:subject/create"
+            path="/:subject/:pageType/create"
             render={() => (
               <div>
                 <Menu />

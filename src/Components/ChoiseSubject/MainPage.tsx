@@ -14,12 +14,15 @@ const SubjectMenu = () => {
   const engLanguage = () => {
     localStorage.subject = "english";
   };
-  const library = () => {
+  const math = () => {
     localStorage.subject = "math";
   };
   const art = () => {
     localStorage.subject = "art";
   };
+  // const builogy = () => {
+  //   localStorage.subject = "builogy";
+  // };
   return (
     <div className={style.flexBody}>
       <div className={style.body}>
@@ -44,7 +47,7 @@ const SubjectMenu = () => {
           </div>
         </Link>
         <Link to="/math">
-          <div onClick={library} className={style.cube}>
+          <div onClick={math} className={style.cube}>
             <h1 className={style.text}>Математика</h1>
           </div>
         </Link>
@@ -55,7 +58,7 @@ const SubjectMenu = () => {
         </Link>
         <Link to="/about">
           <div className={style.cube}>
-            <h1 className={style.text}>О сайте</h1>
+            <h1 className={style.text}>Биология</h1>
           </div>
         </Link>
       </div>

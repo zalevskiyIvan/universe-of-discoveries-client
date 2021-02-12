@@ -42,14 +42,24 @@ const PostsRender: React.FC<propsType> = (props) => {
         return state.addPostReducer.shortProjects;
     }
   });
+  const statusCode = useSelector(
+    (state: any) => state.addPostReducer.statusCode
+  );
   const dispatch = useDispatch();
   const history = useHistory();
+
   const openProject = (id: string) => {
     if (history.location.pathname === `/${localStorage.subject}/project`) {
       history.push(`/${localStorage.subject}/project/${id}`);
     }
   };
 
+  const re_authorization = (code: number) => {
+    if (statusCode === code) {
+      localStorage.clear();
+      // history.push("/");
+    }
+  };
   const [page, setPage] = useState(1);
 
   const forward = () => {
@@ -76,16 +86,14 @@ const PostsRender: React.FC<propsType> = (props) => {
     }
   }, [page]);
 
-  //posts:
-  // const [addMode, setAddMode] = useState(false);
   const openAddPost = () => {
     const subject = localStorage.subject;
     if (props.type === "projects") history.push(`/${subject}/create-project`);
-    else history.push(`/${subject}/create/${props.type}`);
-    // setAddMode(true);
+    else history.push(`/${subject}/${props.type}/create`);
   };
 
   const [filterMod, setFilterMod] = useState(false);
+
   const addFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.value) {
       switch (props.type) {
@@ -120,12 +128,16 @@ const PostsRender: React.FC<propsType> = (props) => {
     switch (props.type) {
       case "events":
         dispatch(deleteEventT(id));
+        re_authorization(205);
+
         break;
       case "tasks":
         dispatch(deleteTaskT(id));
+        re_authorization(205);
         break;
       case "projects":
         dispatch(deleteProjectT(id));
+        re_authorization(205);
         break;
     }
   };
@@ -138,8 +150,12 @@ const PostsRender: React.FC<propsType> = (props) => {
       {!props.pending && (
         <Button className={style.createProject} onClick={openAddPost}>
           {props.type === "projects" && <span>Создать проект</span>}
-          {props.type === "tasks" && <span>Новое задание</span>}
-          {props.type === "events" && <span>Новое мероприятие</span>}
+          {props.type === "tasks" && localStorage.auth && (
+            <span>Новое задание</span>
+          )}
+          {props.type === "events" && localStorage.auth && (
+            <span>Новое мероприятие</span>
+          )}
         </Button>
       )}
       <Input
