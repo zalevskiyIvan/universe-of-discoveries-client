@@ -84,6 +84,9 @@ const PostsRender: React.FC<propsType> = (props) => {
         pageProject();
         break;
     }
+    return () => {
+      dispatch(actions.clear());
+    };
   }, [page]);
 
   const openAddPost = () => {

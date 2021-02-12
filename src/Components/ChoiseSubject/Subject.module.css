@@ -4,11 +4,13 @@
 
 .body {
   display: grid;
-  grid-template-columns: 0fr 0fr 0fr;
-  grid-gap: 1%;
+  grid-template-columns: 1fr 1fr 1px;
   transform: rotate(-45deg);
-  margin-left: 23%;
+  margin-left: 25%;
+  margin-top: 5%;
   background-color: rgb(28, 29, 87);
+  grid-column-gap: 1%;
+  grid-row-gap: 0.7%;
 }
 .cube {
   width: 250px;
@@ -16,37 +18,25 @@
   background-color: #eeee;
   transition: all 0.3s ease;
 }
-/* .biology {
-  grid-column: 4/4;
-} */
+.cube > h1 {
+  margin-left: 30%;
+}
+.physics {
+  grid-row: 3/3;
+}
+.physics > div > h1 {
+  padding-left: 15%;
+}
 .cube:hover {
   background-color: rgb(255, 255, 255);
   cursor: pointer;
 }
 
-@media (max-height: 770px) {
+@media (max-height: 830px) {
   .cube {
     width: 200px;
     height: 200px;
   }
-}
-@media (max-height: 740px) {
-  .cube {
-    width: 220px;
-    height: 220px;
-  }
-}
-@media (max-height: 670px) {
-  .cube {
-    width: 200px;
-    height: 200px;
-  }
-  .text {
-    font-size: 26px;
-    margin-right: -30%;
-  }
-}
-@media (max-width: 3000px) {
 }
 @media (min-width: 905px) {
   .flexBody {
