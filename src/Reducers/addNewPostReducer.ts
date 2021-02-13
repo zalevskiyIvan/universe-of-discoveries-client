@@ -10,8 +10,8 @@ export type arrType = {
   subject: string;
   _id?: string;
   choise?: string;
-  link: string;
-  description: string;
+  link?: string;
+  description?: string;
   date: string;
   img: string;
 };
@@ -27,6 +27,7 @@ const initianState = {
   userfulLinks: [] as Array<userfulLinksType>,
   projects: [] as Array<any>,
   statusCode: 0,
+  totalCount: 0,
 };
 type stateType = typeof initianState;
 const addPostReducer = (
@@ -38,6 +39,7 @@ const addPostReducer = (
       return {
         ...state,
         events: action.part.reverse(),
+        totalCount: action.totalCount,
       };
     case "DELETE_EVENTS":
       return {
@@ -47,6 +49,7 @@ const addPostReducer = (
     case "GET_TASK":
       return {
         ...state,
+        totalCount: action.totalCount,
         tasks: action.part.reverse(),
       };
     case "DELETE_TASK":
@@ -57,6 +60,7 @@ const addPostReducer = (
     case "GET_SHORT_PROJECT":
       return {
         ...state,
+        totalCount: action.totalCount,
         shortProjects: action.part.reverse(),
       };
     case "DELETE_PROJECT":
@@ -78,13 +82,14 @@ const addPostReducer = (
         shortProjects: [],
         events: [],
         tasks: [],
+        totalCount: 0,
       };
     case "GET_USEFUL_LINK":
       return {
         ...state,
         userfulLinks: action.part.reverse(),
       };
-    case "INFO":
+    case "STATUS_CODE":
       return {
         ...state,
         statusCode: action.statusCode,
@@ -95,18 +100,18 @@ const addPostReducer = (
 };
 type actionType = ActionTypes<typeof actions>;
 export const actions = {
-  getEventsAC: (eventArr: Array<arrType>) =>
-    ({ type: "GET_EVENTS", part: eventArr } as const),
+  getEventsAC: (eventArr: Array<ReceivedPostType>, totalCount: number) =>
+    ({ type: "GET_EVENTS", part: eventArr, totalCount } as const),
   //
   deleteEventsAC: (id: string) => ({ type: "DELETE_EVENTS", id } as const),
   //
-  getTaskAC: (taskArr: Array<arrType>) =>
-    ({ type: "GET_TASK", part: taskArr } as const),
+  getTaskAC: (taskArr: Array<ReceivedPostType>, totalCount: number) =>
+    ({ type: "GET_TASK", part: taskArr, totalCount } as const),
   //
   deleteTaskAC: (id: string) => ({ type: "DELETE_TASK", id } as const),
   //
-  getShortProjectAC: (shortProjectArr: Array<arrType>) =>
-    ({ type: "GET_SHORT_PROJECT", part: shortProjectArr } as const),
+  getShortProjectAC: (shortProjectArr: Array<arrType>, totalCount: number) =>
+    ({ type: "GET_SHORT_PROJECT", part: shortProjectArr, totalCount } as const),
   //
   deleteProjectAC: (id: string) => ({ type: "DELETE_PROJECT", id } as const),
   //
@@ -115,12 +120,20 @@ export const actions = {
   //
   clear: () => ({ type: "CLEAR" } as const),
   //
-  statusCodeAC: (statusCode: number) => ({ type: "INFO", statusCode } as const),
+  statusCodeAC: (statusCode: number) =>
+    ({ type: "STATUS_CODE", statusCode } as const),
   //
   getUsefulLinkAC: (linksArr: Array<userfulLinksType>) =>
     ({ type: "GET_USEFUL_LINK", part: linksArr } as const),
 };
-
+export type ReceivedPostType = {
+  klass: string;
+  header: string;
+  body: string;
+  img: string;
+  subject: string;
+  date: string;
+};
 export const addEventT = (
   klass: any,
   header: string,
@@ -130,7 +143,7 @@ export const addEventT = (
   const date = new Date().toLocaleDateString();
   const subject = localStorage.subject;
   return async (dispatch: any) => {
-    const data = { klass, header, body, img, subject, date };
+    const data: ReceivedPostType = { klass, header, body, img, subject, date };
     const res = await API.addNewEvent(data);
     if (res.status == 205) {
       dispatch(actions.statusCodeAC(res.status));
@@ -144,7 +157,7 @@ export const getEventT = (page: number) => {
   if (!klass) klass = 0;
   return async (dispatch: any) => {
     const res = await API.getEvent(klass, subject, page);
-    dispatch(actions.getEventsAC(res.data));
+    dispatch(actions.getEventsAC(res.data.events, res.data.totalCount));
   };
 };
 export const deleteEventT = (id: string) => {
@@ -162,7 +175,7 @@ export const getEventsWithFilterT = (filter: string) => {
   if (!klass) klass = 0;
   return async (dispatch: Dispatch<actionType>) => {
     const res = await API.getEventsWithFilter(klass, subject, filter);
-    dispatch(actions.getEventsAC(res.data));
+    dispatch(actions.getEventsAC(res.data, 1));
   };
 };
 
@@ -191,7 +204,7 @@ export const getTaskT = (page: number) => {
   if (!klass) klass = 0;
   return async (dispatch: Dispatch<actionType>) => {
     const res = await API.getTask(klass, subject, page);
-    dispatch(actions.getTaskAC(res.data));
+    dispatch(actions.getTaskAC(res.data.tasks, res.data.totalCount));
   };
 };
 export const deleteTaskT = (id: string) => {
@@ -209,7 +222,7 @@ export const getTaskWithFilterT = (filter: string) => {
   if (!klass) klass = 0;
   return async (dispatch: Dispatch<actionType>) => {
     const res = await API.getTaskWithFilter(klass, subject, filter);
-    dispatch(actions.getTaskAC(res.data));
+    dispatch(actions.getTaskAC(res.data, res.data.length));
   };
 };
 
@@ -252,13 +265,14 @@ export type projectType = {
 
 export const getShortProjectT = (page: number) => {
   const subject = localStorage.subject;
-  return async (dispatch: any) => {
+  return async (dispatch: Dispatch<actionType>) => {
     const res = await API.getShortProject(subject, page);
-    dispatch(actions.getShortProjectAC(res.data));
+    debugger;
+    dispatch(actions.getShortProjectAC(res.data.projects, res.data.totalCount));
   };
 };
 export const deleteProjectT = (id: string) => {
-  return async (dispatch: any) => {
+  return async (dispatch: Dispatch<actionType>) => {
     const res = await API.deleteProject(id);
     if (res.status == 205) {
       dispatch(actions.statusCodeAC(res.status));
@@ -268,20 +282,20 @@ export const deleteProjectT = (id: string) => {
 };
 export const getShortProjectWithFilterT = (filter: string) => {
   const subject = localStorage.subject;
-  return async (dispatch: any) => {
+  return async (dispatch: Dispatch<actionType>) => {
     const res = await API.getProjectWithFilter(subject, filter);
-    dispatch(actions.getShortProjectAC(res.data));
+    dispatch(actions.getShortProjectAC(res.data, res.data.length));
   };
 };
 
 export const getPendingProjectWithFilterT = (filter: string) => {
   const subject = localStorage.subject;
-  return async (dispatch: any) => {
+  return async (dispatch: Dispatch<actionType>) => {
     const res = await API.getPendingProjectWithFilter(subject, filter);
     if (res.status == 205) {
       dispatch(actions.statusCodeAC(res.status));
     }
-    dispatch(actions.getShortProjectAC(res.data));
+    dispatch(actions.getShortProjectAC(res.data, res.data.length));
   };
 };
 
@@ -291,14 +305,17 @@ export type imgArr = {
 };
 
 export const addProjectT = (data: projectType) => {
-  return async (dispatch: any) => {
+  return async (dispatch: Dispatch<actionType>) => {
     const res = await API.addProject(data);
+    debugger;
+    const payload = res.data;
+    dispatch(actions.getFullProjectAC(payload));
   };
 };
 
 export const getProjectT = (id: number) => {
   const subject = localStorage.subject;
-  return async (dispatch: any) => {
+  return async (dispatch: Dispatch<actionType>) => {
     const res = await API.getProject(subject, id);
     dispatch(actions.getFullProjectAC(res.data));
   };
@@ -306,17 +323,17 @@ export const getProjectT = (id: number) => {
 
 export const getPendingProjectT = (page: number) => {
   const subject = localStorage.subject;
-  return async (dispatch: any) => {
+  return async (dispatch: Dispatch<actionType>) => {
     const res = await API.getPendingProject(subject, page);
     if (res.status == 205) {
       dispatch(actions.statusCodeAC(res.status));
     }
-    dispatch(actions.getShortProjectAC(res.data));
+    dispatch(actions.getShortProjectAC(res.data.projects, res.data.totalCount));
   };
 };
 
 export const allowProjectT = (id: string) => {
-  return async (dispatch: any) => {
+  return async (dispatch: Dispatch<actionType>) => {
     const res = await API.allowProject(id);
     if (res.status == 205) {
       dispatch(actions.statusCodeAC(res.status));

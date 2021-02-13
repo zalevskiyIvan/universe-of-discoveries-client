@@ -45,6 +45,9 @@ const PostsRender: React.FC<propsType> = (props) => {
   const statusCode = useSelector(
     (state: any) => state.addPostReducer.statusCode
   );
+  const totalPostCount = useSelector(
+    (state: any) => state.addPostReducer.totalCount
+  );
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -175,13 +178,14 @@ const PostsRender: React.FC<propsType> = (props) => {
             style={{ color: "white", fontSize: 30 }}
           />
         )}
-        {state.length === 4 && !filterMod && (
-          <RightOutlined
-            onClick={forward}
-            className={style.rightButton}
-            style={{ color: "white", fontSize: 30 }}
-          />
-        )}
+        {state.length === 4 &&
+          !filterMod && ( // добавить totalCount
+            <RightOutlined
+              onClick={forward}
+              className={style.rightButton}
+              style={{ color: "white", fontSize: 30 }}
+            />
+          )}
       </div>
       {state.map((item: any) => {
         return (
@@ -215,20 +219,22 @@ const PostsRender: React.FC<propsType> = (props) => {
           </div>
         );
       })}
-      {state.length === 4 && (
-        <div className={style.pagination}>
+      <div className={style.pagination}>
+        {page !== 1 && !filterMod && (
           <LeftOutlined
             onClick={back}
             className={style.leftButton}
             style={{ color: "white", fontSize: 30 }}
           />
+        )}
+        {state.length === 4 && !filterMod && (
           <RightOutlined
             onClick={forward}
             className={style.rightButton}
             style={{ color: "white", fontSize: 30 }}
           />
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };

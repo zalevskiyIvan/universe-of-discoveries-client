@@ -38,6 +38,7 @@ export default function CreatePost() {
           re_authorization(205);
           break;
         case "links":
+          if (!v.link || !v.description) break;
           dispatch(addUsefulLinkT(v.link, v.description));
           re_authorization(205);
           break;

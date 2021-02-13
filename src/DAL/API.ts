@@ -1,8 +1,9 @@
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
+import { arrType, ReceivedPostType } from "../Reducers/addNewPostReducer";
 
 const instanse = axios.create({
-  baseURL: "https://universe-of-discoveries-server.herokuapp.com/api/",
-  // baseURL: "http://localhost:3001/api/",
+  // baseURL: "https://universe-of-discoveries-server.herokuapp.com/api/",
+  baseURL: "http://localhost:3001/api/",
   headers: {
     "Access-Control-Allow-Origin": "*",
     "Content-Type": "application/json",
@@ -16,10 +17,16 @@ export const API = {
   },
 
   //              Events
-  addNewEvent: (data: any) => {
+  addNewEvent: (
+    data: ReceivedPostType
+  ): Promise<AxiosResponse<{ id: string }>> => {
     return instanse.post("events", data);
   },
-  getEvent: (klass: string, subject: string, page: number) => {
+  getEvent: (
+    klass: string,
+    subject: string,
+    page: number
+  ): Promise<AxiosResponse<{ events: arrType[]; totalCount: number }>> => {
     return instanse.get(
       `events?klass=${klass}&subject=${subject}&page=${page}`
     );
@@ -27,14 +34,18 @@ export const API = {
   deleteEvent: (id: string) => {
     return instanse.delete(`events?id=${id}`);
   },
-  getEventsWithFilter: (klass: string, subject: string, filter: string) => {
+  getEventsWithFilter: (
+    klass: string,
+    subject: string,
+    filter: string
+  ): Promise<AxiosResponse<arrType[]>> => {
     return instanse.get(
       `filter-events?klass=${klass}&subject=${subject}&filter=${filter}`
     );
   },
 
   //              Tasks
-  addNewTask: (data: any) => {
+  addNewTask: (data: ReceivedPostType) => {
     return instanse.post("tasks", data);
   },
   getTask: (klass: string, subject: string, page: number) => {
