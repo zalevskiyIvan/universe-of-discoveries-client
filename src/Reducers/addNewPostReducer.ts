@@ -1,5 +1,6 @@
 import { Dispatch } from "react";
 import { useHistory } from "react-router-dom";
+import { re_auth_code } from "../Components/Common/Common";
 import API from "../DAL/API";
 import { ActionTypes } from "../store";
 
@@ -61,7 +62,7 @@ const addPostReducer = (
       return {
         ...state,
         totalCount: action.totalCount,
-        shortProjects: action.part.reverse(),
+        shortProjects: action.part,
       };
     case "DELETE_PROJECT":
       return {
@@ -134,6 +135,7 @@ export type ReceivedPostType = {
   subject: string;
   date: string;
 };
+
 export const addEventT = (
   klass: any,
   header: string,
@@ -145,7 +147,7 @@ export const addEventT = (
   return async (dispatch: any) => {
     const data: ReceivedPostType = { klass, header, body, img, subject, date };
     const res = await API.addNewEvent(data);
-    if (res.status == 205) {
+    if (res.status == re_auth_code) {
       dispatch(actions.statusCodeAC(res.status));
     }
   };
@@ -163,7 +165,7 @@ export const getEventT = (page: number) => {
 export const deleteEventT = (id: string) => {
   return async (dispatch: Dispatch<actionType>) => {
     const res = await API.deleteEvent(id);
-    if (res.status == 205) {
+    if (res.status == re_auth_code) {
       dispatch(actions.statusCodeAC(res.status));
     }
     if (res.data) dispatch(actions.deleteEventsAC(res.data));
@@ -192,7 +194,7 @@ export const addTaskT = (
   return async (dispatch: Dispatch<actionType>) => {
     const data = { klass, header, body, img, subject, date };
     const res = await API.addNewTask(data);
-    if (res.status == 205) {
+    if (res.status == re_auth_code) {
       dispatch(actions.statusCodeAC(res.status));
     }
   };
@@ -210,7 +212,7 @@ export const getTaskT = (page: number) => {
 export const deleteTaskT = (id: string) => {
   return async (dispatch: Dispatch<actionType>) => {
     const res = await API.deleteTask(id);
-    if (res.status == 205) {
+    if (res.status == re_auth_code) {
       dispatch(actions.statusCodeAC(res.status));
     }
     dispatch(actions.deleteTaskAC(res.data));
@@ -231,7 +233,7 @@ export const getTaskWithFilterT = (filter: string) => {
 export const addUsefulLinkT = (link: string, description: string) => {
   return async (dispatch: Dispatch<actionType>) => {
     const res = await API.addNewUsefulLink(link, description);
-    if (res.status == 205) {
+    if (res.status == re_auth_code) {
       dispatch(actions.statusCodeAC(res.status));
     }
   };
@@ -267,14 +269,13 @@ export const getShortProjectT = (page: number) => {
   const subject = localStorage.subject;
   return async (dispatch: Dispatch<actionType>) => {
     const res = await API.getShortProject(subject, page);
-    debugger;
     dispatch(actions.getShortProjectAC(res.data.projects, res.data.totalCount));
   };
 };
 export const deleteProjectT = (id: string) => {
   return async (dispatch: Dispatch<actionType>) => {
     const res = await API.deleteProject(id);
-    if (res.status == 205) {
+    if (res.status == re_auth_code) {
       dispatch(actions.statusCodeAC(res.status));
     }
     dispatch(actions.deleteProjectAC(res.data));
@@ -292,7 +293,7 @@ export const getPendingProjectWithFilterT = (filter: string) => {
   const subject = localStorage.subject;
   return async (dispatch: Dispatch<actionType>) => {
     const res = await API.getPendingProjectWithFilter(subject, filter);
-    if (res.status == 205) {
+    if (res.status == re_auth_code) {
       dispatch(actions.statusCodeAC(res.status));
     }
     dispatch(actions.getShortProjectAC(res.data, res.data.length));
@@ -307,9 +308,9 @@ export type imgArr = {
 export const addProjectT = (data: projectType) => {
   return async (dispatch: Dispatch<actionType>) => {
     const res = await API.addProject(data);
-    debugger;
     const payload = res.data;
-    dispatch(actions.getFullProjectAC(payload));
+    debugger;
+    // dispatch(actions.getShortProjectAC(payload,  ));
   };
 };
 
@@ -325,7 +326,7 @@ export const getPendingProjectT = (page: number) => {
   const subject = localStorage.subject;
   return async (dispatch: Dispatch<actionType>) => {
     const res = await API.getPendingProject(subject, page);
-    if (res.status == 205) {
+    if (res.status == re_auth_code) {
       dispatch(actions.statusCodeAC(res.status));
     }
     dispatch(actions.getShortProjectAC(res.data.projects, res.data.totalCount));
@@ -335,7 +336,7 @@ export const getPendingProjectT = (page: number) => {
 export const allowProjectT = (id: string) => {
   return async (dispatch: Dispatch<actionType>) => {
     const res = await API.allowProject(id);
-    if (res.status == 205) {
+    if (res.status == re_auth_code) {
       dispatch(actions.statusCodeAC(res.status));
     }
     dispatch(actions.deleteProjectAC(res.data));

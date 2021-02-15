@@ -23,8 +23,10 @@ import {
   SearchOutlined,
   DeleteOutlined,
   CheckOutlined,
+  PlusOutlined,
 } from "@ant-design/icons";
 import { Button, Form, Input } from "antd";
+import { re_auth_code } from "../Common/Common";
 
 type propsType = {
   type: string;
@@ -56,13 +58,15 @@ const PostsRender: React.FC<propsType> = (props) => {
       history.push(`/${localStorage.subject}/project/${id}`);
     }
   };
-
-  const re_authorization = (code: number) => {
-    if (statusCode === code) {
+  console.log(statusCode);
+  const re_authorization = () => {
+    if (statusCode === re_auth_code) {
       localStorage.clear();
-      // history.push("/");
+      history.push("/");
     }
   };
+  const limit = 4;
+  const pageCount = totalPostCount / limit;
   const [page, setPage] = useState(1);
 
   const forward = () => {
@@ -134,16 +138,16 @@ const PostsRender: React.FC<propsType> = (props) => {
     switch (props.type) {
       case "events":
         dispatch(deleteEventT(id));
-        re_authorization(205);
+        re_authorization();
 
         break;
       case "tasks":
         dispatch(deleteTaskT(id));
-        re_authorization(205);
+        re_authorization();
         break;
       case "projects":
         dispatch(deleteProjectT(id));
-        re_authorization(205);
+        re_authorization();
         break;
     }
   };
@@ -155,13 +159,7 @@ const PostsRender: React.FC<propsType> = (props) => {
     <div>
       {!props.pending && (
         <Button className={style.createProject} onClick={openAddPost}>
-          {props.type === "projects" && <span>Создать проект</span>}
-          {props.type === "tasks" && localStorage.auth && (
-            <span>Новое задание</span>
-          )}
-          {props.type === "events" && localStorage.auth && (
-            <span>Новое мероприятие</span>
-          )}
+          <PlusOutlined />
         </Button>
       )}
       <Input
@@ -178,14 +176,13 @@ const PostsRender: React.FC<propsType> = (props) => {
             style={{ color: "white", fontSize: 30 }}
           />
         )}
-        {state.length === 4 &&
-          !filterMod && ( // добавить totalCount
-            <RightOutlined
-              onClick={forward}
-              className={style.rightButton}
-              style={{ color: "white", fontSize: 30 }}
-            />
-          )}
+        {totalPostCount / 4 !== 1 && state.length == 4 && !filterMod && (
+          <RightOutlined
+            onClick={forward}
+            className={style.rightButton}
+            style={{ color: "white", fontSize: 30 }}
+          />
+        )}
       </div>
       {state.map((item: any) => {
         return (
@@ -220,20 +217,22 @@ const PostsRender: React.FC<propsType> = (props) => {
         );
       })}
       <div className={style.pagination}>
-        {page !== 1 && !filterMod && (
+        {page !== 1 && !filterMod && state.length !== 1 && (
           <LeftOutlined
             onClick={back}
             className={style.leftButton}
             style={{ color: "white", fontSize: 30 }}
           />
         )}
-        {state.length === 4 && !filterMod && (
-          <RightOutlined
-            onClick={forward}
-            className={style.rightButton}
-            style={{ color: "white", fontSize: 30 }}
-          />
-        )}
+        {totalPostCount / 4 !== 1 &&
+          state.length == 4 &&
+          !filterMod && ( // добавить totalCount
+            <RightOutlined
+              onClick={forward}
+              className={style.rightButton}
+              style={{ color: "white", fontSize: 30 }}
+            />
+          )}
       </div>
     </div>
   );

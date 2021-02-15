@@ -12,6 +12,7 @@ body {
 }
 .ul .li {
   list-style: none;
+  cursor: pointer;
 }
 .ul .li .a {
   padding-left: 15px;

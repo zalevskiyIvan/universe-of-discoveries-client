@@ -26,7 +26,8 @@ export default function CreatePost() {
   const location = useLocation();
   const postType = location.pathname.split("/")[2];
 
-  const add = (v: arrType) => {
+  const add = (v: any) => {
+    // arrType
     if (localStorage.auth) {
       switch (postType) {
         case "events":
@@ -45,7 +46,9 @@ export default function CreatePost() {
       }
     } else alert("У вас нет прав");
   };
-
+  // const uploadFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   console.log(e.target.files);
+  // };
   if (localStorage.auth) {
     return (
       <div className={style.adder}>
@@ -85,6 +88,9 @@ export default function CreatePost() {
               <Form.Item name="img">
                 <Input placeholder="Введите ссылку на картинку" />
               </Form.Item>
+              {/* <Form.Item>
+                <Input onChange={(e) => uploadFile(e)} type="file" />
+              </Form.Item> */}
             </>
           )}
           <Form.Item>

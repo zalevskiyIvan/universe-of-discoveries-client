@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { BrowserRouter, Link, Route, Switch } from "react-router-dom";
 import "antd/dist/antd.css";
 import "./App.css";
 import StartScreen from "./Components/StartScreen/StartScreen";
@@ -14,12 +14,13 @@ import CreateProject from "./Components/Project/CreateProject";
 import PostsRender from "./Components/PostsRender/PostsRender";
 import Logaut from "./Components/Logaut/Logaut";
 import CreatePost from "./Components/CreatePost/CreatePost";
+import { Button } from "antd";
 
 const App = () => {
   return (
     <BrowserRouter>
       <div className="App">
-        <div className="logaut">
+        <div className="helpers">
           <Logaut />
         </div>
         <Switch>
@@ -48,7 +49,6 @@ const App = () => {
               </div>
             )}
           />
-
           <Route
             path="/:subject/project"
             render={() => (
@@ -89,6 +89,9 @@ const App = () => {
           <Route path="/:subject" render={() => <PageMenu />} />
           <Route path="/" exact render={() => <StartScreen />} />
         </Switch>
+        {/* <div className="footer">
+          <span>По вопросам: infsiteadm@gmail.com</span>
+        </div> */}
       </div>
     </BrowserRouter>
   );

@@ -12,8 +12,8 @@ const instanse = axios.create({
 });
 
 export const API = {
-  auth: () => {
-    return instanse.get("auth");
+  auth: (password: string) => {
+    return instanse.post("auth", { password });
   },
 
   //              Events

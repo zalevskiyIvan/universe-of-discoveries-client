@@ -78,6 +78,7 @@ img {
     margin-left: 0%;
   }
 }
+
 @media (max-width: 730px) {
   .header {
     font-size: 40px;
@@ -137,13 +138,16 @@ img {
     width: 75%;
   }
   .filter {
-    width: 60%;
-    margin-left: 16%;
+    width: 50%;
+    margin-left: 20%;
+    margin-bottom: 10%;
   }
   .createProject {
-    width: 34%;
-    margin-left: 30%;
+    width: 27%;
+    margin-left: 31%;
     margin-bottom: 7%;
     margin-top: -50px;
+  }
+  .leftButton {
   }
 }
