@@ -2,8 +2,8 @@ import axios, { AxiosResponse } from "axios";
 import { arrType, ReceivedPostType } from "../Reducers/addNewPostReducer";
 
 const instanse = axios.create({
-  // baseURL: "https://universe-of-discoveries-server.herokuapp.com/api/",
-  baseURL: "http://localhost:3001/api/",
+  baseURL: "https://universe-of-discoveries-server.herokuapp.com/api/",
+  // baseURL: "http://localhost:3001/api/",
   headers: {
     "Access-Control-Allow-Origin": "*",
     "Content-Type": "application/json",
