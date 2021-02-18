@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useLocation } from "react-router-dom";
 import { getTokenT } from "../../Reducers/autorizetReducer";
-import { correct_password } from "../Common/Common";
+import { correct_password } from "../../Common/Common";
 import style from "./StartMenu.module.css";
 
 type password = {
@@ -45,6 +45,7 @@ const Student = () => {
   };
   const onFinish = (v: klassType) => {
     localStorage.klass = v.klass.toLowerCase();
+    localStorage.parallel = v.klass.split("")[0];
     history.push("/menu");
   };
 

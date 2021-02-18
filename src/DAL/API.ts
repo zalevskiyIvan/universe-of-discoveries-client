@@ -2,8 +2,8 @@ import axios, { AxiosResponse } from "axios";
 import { arrType, ReceivedPostType } from "../Reducers/addNewPostReducer";
 
 const instanse = axios.create({
-  baseURL: "https://universe-of-discoveries-server.herokuapp.com/api/",
-  // baseURL: "http://localhost:3001/api/",
+  // baseURL: "https://universe-of-discoveries-server.herokuapp.com/api/",
+  baseURL: "http://localhost:3001/api/",
   headers: {
     "Access-Control-Allow-Origin": "*",
     "Content-Type": "application/json",
@@ -25,10 +25,11 @@ export const API = {
   getEvent: (
     klass: string,
     subject: string,
-    page: number
+    page: number,
+    parallel: string
   ): Promise<AxiosResponse<{ events: arrType[]; totalCount: number }>> => {
     return instanse.get(
-      `events?klass=${klass}&subject=${subject}&page=${page}`
+      `events?klass=${klass}&subject=${subject}&page=${page}&parallel=${parallel}`
     );
   },
   deleteEvent: (id: string) => {
@@ -37,10 +38,11 @@ export const API = {
   getEventsWithFilter: (
     klass: string,
     subject: string,
-    filter: string
+    filter: string,
+    parallel: string
   ): Promise<AxiosResponse<arrType[]>> => {
     return instanse.get(
-      `filter-events?klass=${klass}&subject=${subject}&filter=${filter}`
+      `filter-events?klass=${klass}&subject=${subject}&filter=${filter}&parallel=${parallel}`
     );
   },
 
@@ -48,15 +50,22 @@ export const API = {
   addNewTask: (data: ReceivedPostType) => {
     return instanse.post("tasks", data);
   },
-  getTask: (klass: string, subject: string, page: number) => {
-    return instanse.get(`tasks?klass=${klass}&subject=${subject}&page=${page}`);
+  getTask: (klass: string, subject: string, page: number, parallel: string) => {
+    return instanse.get(
+      `tasks?klass=${klass}&subject=${subject}&page=${page}&parallel=${parallel}`
+    );
   },
   deleteTask: (id: string) => {
     return instanse.delete(`tasks?id=${id}`);
   },
-  getTaskWithFilter: (klass: string, subject: string, filter: string) => {
+  getTaskWithFilter: (
+    klass: string,
+    subject: string,
+    filter: string,
+    parallel: string
+  ) => {
     return instanse.get(
-      `filter-tasks?klass=${klass}&subject=${subject}&filter=${filter}`
+      `filter-tasks?klass=${klass}&subject=${subject}&filter=${filter}&parallel=${parallel}`
     );
   },
 

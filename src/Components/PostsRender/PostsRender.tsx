@@ -26,7 +26,7 @@ import {
   PlusOutlined,
 } from "@ant-design/icons";
 import { Button, Form, Input } from "antd";
-import { re_auth_code } from "../Common/Common";
+import { re_auth_code } from "../../Common/Common";
 
 type propsType = {
   type: string;
@@ -65,8 +65,6 @@ const PostsRender: React.FC<propsType> = (props) => {
       history.push("/");
     }
   };
-  const limit = 4;
-  const pageCount = totalPostCount / limit;
   const [page, setPage] = useState(1);
 
   const forward = () => {
@@ -157,7 +155,7 @@ const PostsRender: React.FC<propsType> = (props) => {
   };
   return (
     <div>
-      {!props.pending && (
+      {!props.pending && localStorage.auth && (
         <Button className={style.createProject} onClick={openAddPost}>
           <PlusOutlined />
         </Button>

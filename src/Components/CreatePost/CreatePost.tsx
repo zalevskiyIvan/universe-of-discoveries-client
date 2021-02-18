@@ -1,25 +1,24 @@
-import React, { useState } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addEventT,
   addTaskT,
   addUsefulLinkT,
-  arrType,
 } from "../../Reducers/addNewPostReducer";
-import { Button, Divider, Form, Input, Select } from "antd";
-import { Option } from "antd/lib/mentions";
+import { Button, Divider, Form, Input } from "antd";
 import style from "./CreatePost.module.css";
-import { useLocation, useParams } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 //
 export default function CreatePost() {
   const dispatch = useDispatch();
+  const history = useHistory();
   const statusCode = useSelector(
     (state: any) => state.addPostReducer.statusCode
   );
   const re_authorization = (code: number) => {
     if (statusCode === code) {
       localStorage.clear();
-      // history.push("/");
+      history.push("/");
     }
   };
   ////
@@ -27,39 +26,47 @@ export default function CreatePost() {
   const postType = location.pathname.split("/")[2];
 
   const add = (v: any) => {
-    // arrType
+    if (!v.date) v.date = new Date().toLocaleDateString();
     if (localStorage.auth) {
       switch (postType) {
         case "events":
-          dispatch(addEventT(v.klass.toLowerCase(), v.header, v.body, v.img));
-          re_authorization(205);
+          dispatch(
+            addEventT(v.klass.toLowerCase(), v.header, v.body, v.img, v.date)
+          );
+          re_authorization(403);
           break;
         case "tasks":
-          dispatch(addTaskT(v.klass.toLowerCase(), v.header, v.body, v.img));
-          re_authorization(205);
+          dispatch(
+            addTaskT(v.klass.toLowerCase(), v.header, v.body, v.img, v.date)
+          );
+          re_authorization(403);
           break;
         case "links":
           if (!v.link || !v.description) break;
           dispatch(addUsefulLinkT(v.link, v.description));
-          re_authorization(205);
+          re_authorization(403);
           break;
       }
     } else alert("У вас нет прав");
   };
-  // const uploadFile = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   console.log(e.target.files);
-  // };
+
   if (localStorage.auth) {
     return (
       <div className={style.adder}>
         <Form onFinish={add}>
           <Form.Item
             rules={[
-              { required: true, message: "Введите номер и букву класса" },
+              {
+                required: true,
+                message: "",
+              },
             ]}
             name="klass"
           >
-            <Input allowClear placeholder="Введите номер и букву класса" />
+            <Input
+              allowClear
+              placeholder="Введите класс с буквой или просто цифру параллели"
+            />
           </Form.Item>
           {postType === "links" && (
             <>
@@ -86,17 +93,24 @@ export default function CreatePost() {
                 <Input.TextArea placeholder="Введите текст поста" />
               </Form.Item>
               <Form.Item name="img">
-                <Input placeholder="Введите ссылку на картинку" />
+                <Input placeholder="Введите ссылку на картинку (не обязательно)" />
               </Form.Item>
-              {/* <Form.Item>
-                <Input onChange={(e) => uploadFile(e)} type="file" />
-              </Form.Item> */}
+              <Form.Item name="date">
+                <Input placeholder="Введите дату (не обязательно)" />
+              </Form.Item>
             </>
           )}
           <Form.Item>
             <Button htmlType="submit">Добавить пост</Button>
           </Form.Item>
           <Divider />
+          <Form.Item>
+            {statusCode === 201 && (
+              <div>
+                <h1 style={{ color: "red" }}>Пост добавлен!</h1>
+              </div>
+            )}
+          </Form.Item>
         </Form>
       </div>
     );

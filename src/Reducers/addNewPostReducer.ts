@@ -1,6 +1,6 @@
 import { Dispatch } from "react";
 import { useHistory } from "react-router-dom";
-import { re_auth_code } from "../Components/Common/Common";
+import { re_auth_code } from "../Common/Common";
 import API from "../DAL/API";
 import { ActionTypes } from "../store";
 
@@ -140,14 +140,18 @@ export const addEventT = (
   klass: any,
   header: string,
   body: string,
-  img: string
+  img: string,
+  date: string
 ) => {
-  const date = new Date().toLocaleDateString();
   const subject = localStorage.subject;
   return async (dispatch: any) => {
     const data: ReceivedPostType = { klass, header, body, img, subject, date };
     const res = await API.addNewEvent(data);
-    if (res.status == re_auth_code) {
+    if (res.status === re_auth_code) {
+      dispatch(actions.statusCodeAC(res.status));
+    }
+    if (res.status === 201) {
+      debugger;
       dispatch(actions.statusCodeAC(res.status));
     }
   };
@@ -156,27 +160,29 @@ export const addEventT = (
 export const getEventT = (page: number) => {
   let klass = localStorage.klass;
   const subject = localStorage.subject;
+  const parallel = localStorage.parallel;
   if (!klass) klass = 0;
   return async (dispatch: any) => {
-    const res = await API.getEvent(klass, subject, page);
+    const res = await API.getEvent(klass, subject, page, parallel);
     dispatch(actions.getEventsAC(res.data.events, res.data.totalCount));
   };
 };
 export const deleteEventT = (id: string) => {
   return async (dispatch: Dispatch<actionType>) => {
     const res = await API.deleteEvent(id);
-    if (res.status == re_auth_code) {
+    if (res.status === re_auth_code) {
       dispatch(actions.statusCodeAC(res.status));
     }
-    if (res.data) dispatch(actions.deleteEventsAC(res.data));
+    dispatch(actions.deleteEventsAC(id));
   };
 };
 export const getEventsWithFilterT = (filter: string) => {
   let klass = localStorage.klass;
   const subject = localStorage.subject;
+  const parallel = localStorage.parallel;
   if (!klass) klass = 0;
   return async (dispatch: Dispatch<actionType>) => {
-    const res = await API.getEventsWithFilter(klass, subject, filter);
+    const res = await API.getEventsWithFilter(klass, subject, filter, parallel);
     dispatch(actions.getEventsAC(res.data, 1));
   };
 };
@@ -184,17 +190,20 @@ export const getEventsWithFilterT = (filter: string) => {
 //
 
 export const addTaskT = (
-  klass: any,
+  klass: string,
   header: string,
   body: string,
-  img: string
+  img: string,
+  date: string
 ) => {
-  const date = new Date().toLocaleDateString();
   const subject = localStorage.subject;
   return async (dispatch: Dispatch<actionType>) => {
     const data = { klass, header, body, img, subject, date };
     const res = await API.addNewTask(data);
-    if (res.status == re_auth_code) {
+    if (res.status === re_auth_code) {
+      dispatch(actions.statusCodeAC(res.status));
+    }
+    if (res.status === 201) {
       dispatch(actions.statusCodeAC(res.status));
     }
   };
@@ -203,27 +212,30 @@ export const addTaskT = (
 export const getTaskT = (page: number) => {
   let klass = localStorage.klass;
   const subject = localStorage.subject;
+  const parallel = localStorage.parallel;
   if (!klass) klass = 0;
   return async (dispatch: Dispatch<actionType>) => {
-    const res = await API.getTask(klass, subject, page);
+    const res = await API.getTask(klass, subject, page, parallel);
     dispatch(actions.getTaskAC(res.data.tasks, res.data.totalCount));
   };
 };
 export const deleteTaskT = (id: string) => {
   return async (dispatch: Dispatch<actionType>) => {
     const res = await API.deleteTask(id);
-    if (res.status == re_auth_code) {
+    if (res.status === re_auth_code) {
       dispatch(actions.statusCodeAC(res.status));
     }
-    dispatch(actions.deleteTaskAC(res.data));
+    debugger;
+    dispatch(actions.deleteTaskAC(id));
   };
 };
 export const getTaskWithFilterT = (filter: string) => {
   let klass = localStorage.klass;
   const subject = localStorage.subject;
+  const parallel = localStorage.parallel;
   if (!klass) klass = 0;
   return async (dispatch: Dispatch<actionType>) => {
-    const res = await API.getTaskWithFilter(klass, subject, filter);
+    const res = await API.getTaskWithFilter(klass, subject, filter, parallel);
     dispatch(actions.getTaskAC(res.data, res.data.length));
   };
 };
@@ -278,7 +290,7 @@ export const deleteProjectT = (id: string) => {
     if (res.status == re_auth_code) {
       dispatch(actions.statusCodeAC(res.status));
     }
-    dispatch(actions.deleteProjectAC(res.data));
+    dispatch(actions.deleteProjectAC(id));
   };
 };
 export const getShortProjectWithFilterT = (filter: string) => {

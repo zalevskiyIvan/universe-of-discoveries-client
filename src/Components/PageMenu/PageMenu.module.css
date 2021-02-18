@@ -10,6 +10,7 @@
   overflow-x: hidden;
   padding-top: 10%;
   padding-left: 14%;
+  margin-top: -5%;
 }
 .blocks {
   display: grid;
@@ -109,9 +110,8 @@
 
 /* media: */
 
-@media (min-height: 765px) {
+@media (min-height: 855px) {
   .main {
-    margin-top: -5%;
     margin-left: 0%;
   }
   .blocks {
@@ -167,6 +167,7 @@
     padding-left: 10%;
   }
 }
+
 @media (max-width: 1350px) {
   .blocks {
     grid-template-columns: 1fr;
