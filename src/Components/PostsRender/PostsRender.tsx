@@ -15,6 +15,7 @@ import {
   getShortProjectT,
   actions,
   getPendingProjectWithFilterT,
+  editPostT,
 } from "../../Reducers/addNewPostReducer";
 import style from "./PostsRender.module.css";
 import {
@@ -24,9 +25,10 @@ import {
   DeleteOutlined,
   CheckOutlined,
   PlusOutlined,
+  EditOutlined,
 } from "@ant-design/icons";
 import { Button, Form, Input } from "antd";
-import { re_auth_code } from "../../Common/Common";
+import { editPostType, re_auth_code } from "../../Common/Common";
 
 type propsType = {
   type: string;
@@ -149,10 +151,25 @@ const PostsRender: React.FC<propsType> = (props) => {
         break;
     }
   };
+
   const allowProject = (id: string) => {
     dispatch(allowProjectT(id));
     dispatch(actions.deleteProjectAC(id));
   };
+
+  const [editMode, setEditMode] = useState(false);
+  const [editingPostID, setEditingPostID] = useState("");
+  const editElement = (id: string) => {
+    setEditMode(true);
+    setEditingPostID(id);
+  };
+
+  const editPost = (v: editPostType, id: string) => {
+    v.id = id;
+    dispatch(editPostT(v, props.type));
+    setEditMode(false);
+  };
+
   return (
     <div>
       {!props.pending && localStorage.auth && (
@@ -185,32 +202,67 @@ const PostsRender: React.FC<propsType> = (props) => {
       {state.map((item: any) => {
         return (
           <div className={style.eventContainer} key={item._id}>
-            <h2 style={{ color: "black", marginLeft: 40 }}>{item.date}</h2>
-            <div className={style.controllButton}>
-              {localStorage.auth && (
-                <DeleteOutlined
-                  className={style.delete}
-                  onClick={() => deleteElement(item._id)}
+            <Form onFinish={(v) => editPost(v, item._id)}>
+              {editMode && editingPostID === item._id ? (
+                <Form.Item name="date">
+                  <Input defaultValue={item.date} />
+                </Form.Item>
+              ) : (
+                <h2 style={{ color: "black", marginLeft: 40 }}>{item.date}</h2>
+              )}
+
+              <div className={style.controllButton}>
+                {localStorage.auth && !editMode && (
+                  <div>
+                    <DeleteOutlined
+                      className={style.delete}
+                      onClick={() => deleteElement(item._id)}
+                    />
+                    <EditOutlined onClick={() => editElement(item._id)} />
+                  </div>
+                )}
+                {props.pending && (
+                  <CheckOutlined onClick={() => allowProject(item._id)} />
+                )}
+              </div>
+              <div
+                onClick={() => openProject(item._id)}
+                className={style.headerContainer}
+              >
+                {editMode && editingPostID === item._id ? (
+                  <Form.Item name="header" className={style.header}>
+                    <Input defaultValue={item.header} />
+                  </Form.Item>
+                ) : (
+                  <p className={style.header}>{item.header}</p>
+                )}
+              </div>
+              {item.img && <img src={item.img} />}
+              <div>
+                {props.type === "projects" ? (
+                  editMode && editingPostID === item._id ? (
+                    <Form.Item name="shortDescription">
+                      <Input defaultValue={item.shortDescription} />
+                    </Form.Item>
+                  ) : (
+                    <p className={style.body}>{item.shortDescription}</p>
+                  )
+                ) : editMode && editingPostID === item._id ? (
+                  <Form.Item name="body">
+                    <Input defaultValue={item.body} />
+                  </Form.Item>
+                ) : (
+                  <p className={style.body}>{item.body}</p>
+                )}
+              </div>
+              {localStorage.auth && editMode && editingPostID === item._id && (
+                <Button
+                  size="large"
+                  icon={<CheckOutlined />}
+                  htmlType="submit"
                 />
               )}
-              {props.pending && (
-                <CheckOutlined onClick={() => allowProject(item._id)} />
-              )}
-            </div>
-            <div
-              onClick={() => openProject(item._id)}
-              className={style.headerContainer}
-            >
-              <p className={style.header}>{item.header}</p>
-            </div>
-            {item.img && <img src={item.img} />}
-            <div>
-              {props.type === "projects" ? (
-                <p className={style.body}>{item.shortDescription}</p>
-              ) : (
-                <p className={style.body}>{item.body}</p>
-              )}
-            </div>
+            </Form>
           </div>
         );
       })}
@@ -222,15 +274,13 @@ const PostsRender: React.FC<propsType> = (props) => {
             style={{ color: "white", fontSize: 30 }}
           />
         )}
-        {totalPostCount / 4 !== 1 &&
-          state.length == 4 &&
-          !filterMod && ( // добавить totalCount
-            <RightOutlined
-              onClick={forward}
-              className={style.rightButton}
-              style={{ color: "white", fontSize: 30 }}
-            />
-          )}
+        {totalPostCount / 4 !== 1 && state.length == 4 && !filterMod && (
+          <RightOutlined
+            onClick={forward}
+            className={style.rightButton}
+            style={{ color: "white", fontSize: 30 }}
+          />
+        )}
       </div>
     </div>
   );

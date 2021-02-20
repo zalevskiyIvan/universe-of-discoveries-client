@@ -1,6 +1,10 @@
 import { Dispatch } from "react";
 import { useHistory } from "react-router-dom";
-import { re_auth_code } from "../Common/Common";
+import {
+  editFullProjectType,
+  editPostType,
+  re_auth_code,
+} from "../Common/Common";
 import API from "../DAL/API";
 import { ActionTypes } from "../store";
 
@@ -10,7 +14,7 @@ export type arrType = {
   klass: any;
   subject: string;
   _id?: string;
-  choise?: string;
+  // choise?: string;
   link?: string;
   description?: string;
   date: string;
@@ -47,6 +51,14 @@ const addPostReducer = (
         ...state,
         events: [...state.events.filter((item) => item._id !== action.id)],
       };
+    case "UPDATE_EVENT":
+      return {
+        ...state,
+        events: [
+          action.updatedEvent,
+          ...state.events.filter((item) => item._id !== action.id),
+        ],
+      };
     case "GET_TASK":
       return {
         ...state,
@@ -58,11 +70,27 @@ const addPostReducer = (
         ...state,
         tasks: [...state.tasks.filter((item) => item._id !== action.id)],
       };
+    case "UPDATE_TASK":
+      return {
+        ...state,
+        tasks: [
+          action.updatedTask,
+          ...state.tasks.filter((item) => item._id !== action.id),
+        ],
+      };
     case "GET_SHORT_PROJECT":
       return {
         ...state,
         totalCount: action.totalCount,
         shortProjects: action.part,
+      };
+    case "UPDATE_SHORT_PROJECT":
+      return {
+        ...state,
+        shortProjects: [
+          action.updatedProject,
+          ...state.shortProjects.filter((item) => item._id !== action.id),
+        ],
       };
     case "DELETE_PROJECT":
       return {
@@ -74,7 +102,12 @@ const addPostReducer = (
     case "GET_FULL_PROJECT":
       return {
         ...state,
-        projects: action.part,
+        projects: action.project,
+      };
+    case "UPDATE_FULL_PROJECT":
+      return {
+        ...state,
+        projects: [action.updatedProject],
       };
     case "CLEAR":
       return {
@@ -95,6 +128,7 @@ const addPostReducer = (
         ...state,
         statusCode: action.statusCode,
       };
+
     default:
       return state;
   }
@@ -106,18 +140,32 @@ export const actions = {
   //
   deleteEventsAC: (id: string) => ({ type: "DELETE_EVENTS", id } as const),
   //
+  updateEvent: (updatedEvent: ReceivedPostType, id: string) =>
+    ({ type: "UPDATE_EVENT", updatedEvent, id } as const),
+  //
   getTaskAC: (taskArr: Array<ReceivedPostType>, totalCount: number) =>
     ({ type: "GET_TASK", part: taskArr, totalCount } as const),
   //
   deleteTaskAC: (id: string) => ({ type: "DELETE_TASK", id } as const),
   //
+  updateTask: (updatedTask: ReceivedPostType, id: string) =>
+    ({ type: "UPDATE_TASK", updatedTask, id } as const),
+  //
   getShortProjectAC: (shortProjectArr: Array<arrType>, totalCount: number) =>
     ({ type: "GET_SHORT_PROJECT", part: shortProjectArr, totalCount } as const),
   //
+  updateShortProject: (updatedProject: arrType, id: string) =>
+    ({ type: "UPDATE_SHORT_PROJECT", updatedProject, id } as const),
+  //
   deleteProjectAC: (id: string) => ({ type: "DELETE_PROJECT", id } as const),
   //
-  getFullProjectAC: (projectArr: Array<any>) =>
-    ({ type: "GET_FULL_PROJECT", part: projectArr } as const),
+  getFullProjectAC: (...project: any) =>
+    ({ type: "GET_FULL_PROJECT", project } as const),
+  //
+  updateFulltProject: (
+    updatedProject: any, // FIX
+    id: string
+  ) => ({ type: "UPDATE_FULL_PROJECT", updatedProject, id } as const),
   //
   clear: () => ({ type: "CLEAR" } as const),
   //
@@ -136,6 +184,44 @@ export type ReceivedPostType = {
   date: string;
 };
 
+const reAuthCheck = (status: number, dispatch: Dispatch<actionType>) => {
+  if (status === re_auth_code) {
+    dispatch(actions.statusCodeAC(status));
+  }
+};
+
+export const editPostT = (data: editPostType, typeOfPost: string) => {
+  return async (dispatch: Dispatch<actionType>) => {
+    let res;
+    switch (typeOfPost) {
+      case "events":
+        res = await API.editEvents(data);
+        reAuthCheck(res.status, dispatch);
+        dispatch(actions.updateEvent(res.data, data.id));
+        break;
+      case "tasks":
+        res = await API.editTask(data);
+        reAuthCheck(res.status, dispatch);
+        dispatch(actions.updateTask(res.data, data.id));
+        break;
+      case "projects":
+        res = await API.editShortProject(data);
+        reAuthCheck(res.status, dispatch);
+        dispatch(actions.updateShortProject(res.data, data.id));
+        break;
+    }
+  };
+};
+
+export const editFullProjectT = (data: editFullProjectType) => {
+  return async (dispatch: Dispatch<actionType>) => {
+    debugger;
+    const res = await API.editFullProject(data);
+    reAuthCheck(res.status, dispatch);
+    dispatch(actions.updateFulltProject(res.data, data.id));
+  };
+};
+
 export const addEventT = (
   klass: any,
   header: string,
@@ -144,19 +230,15 @@ export const addEventT = (
   date: string
 ) => {
   const subject = localStorage.subject;
-  return async (dispatch: any) => {
+  return async (dispatch: Dispatch<actionType>) => {
     const data: ReceivedPostType = { klass, header, body, img, subject, date };
     const res = await API.addNewEvent(data);
-    if (res.status === re_auth_code) {
-      dispatch(actions.statusCodeAC(res.status));
-    }
+    reAuthCheck(res.status, dispatch);
     if (res.status === 201) {
-      debugger;
       dispatch(actions.statusCodeAC(res.status));
     }
   };
 };
-
 export const getEventT = (page: number) => {
   let klass = localStorage.klass;
   const subject = localStorage.subject;
@@ -225,7 +307,6 @@ export const deleteTaskT = (id: string) => {
     if (res.status === re_auth_code) {
       dispatch(actions.statusCodeAC(res.status));
     }
-    debugger;
     dispatch(actions.deleteTaskAC(id));
   };
 };
@@ -261,20 +342,20 @@ export const getUsefulLinkT = () => {
 //
 
 export type projectType = {
-  header: String;
-  purpose: String;
-  tasks: [String];
-  relevance: String;
-  conclusions: String;
-  results: String;
-  subject: String;
-  date: String;
-  // img: [{imgURL: String, id: Number}],
-  // presentationHtml: String,
-  shortDescription: String;
-  members: [String];
+  header: string;
+  purpose: string;
+  tasks: [string];
+  relevance: string;
+  conclusions: string;
+  results: string;
+  subject: string;
+  date: string;
+  // img: [{imgURL: string, id: Number}],
+  // presentationHtml: string,
+  shortDescription: string;
+  members: [string];
   allowed: boolean;
-  _id?: string;
+  _id: string;
 };
 
 export const getShortProjectT = (page: number) => {
@@ -320,9 +401,6 @@ export type imgArr = {
 export const addProjectT = (data: projectType) => {
   return async (dispatch: Dispatch<actionType>) => {
     const res = await API.addProject(data);
-    const payload = res.data;
-    debugger;
-    // dispatch(actions.getShortProjectAC(payload,  ));
   };
 };
 
@@ -330,7 +408,7 @@ export const getProjectT = (id: number) => {
   const subject = localStorage.subject;
   return async (dispatch: Dispatch<actionType>) => {
     const res = await API.getProject(subject, id);
-    dispatch(actions.getFullProjectAC(res.data));
+    dispatch(actions.getFullProjectAC(...res.data));
   };
 };
 

@@ -1,9 +1,10 @@
 import axios, { AxiosResponse } from "axios";
+import { editPostType, editFullProjectType } from "../Common/Common";
 import { arrType, ReceivedPostType } from "../Reducers/addNewPostReducer";
 
 const instanse = axios.create({
-  // baseURL: "https://universe-of-discoveries-server.herokuapp.com/api/",
-  baseURL: "http://localhost:3001/api/",
+  baseURL: "https://universe-of-discoveries-server.herokuapp.com/api/",
+  // baseURL: "http://localhost:3001/api/",
   headers: {
     "Access-Control-Allow-Origin": "*",
     "Content-Type": "application/json",
@@ -45,18 +46,29 @@ export const API = {
       `filter-events?klass=${klass}&subject=${subject}&filter=${filter}&parallel=${parallel}`
     );
   },
+  editEvents: (data: editPostType) => {
+    return instanse.put("events", data);
+  },
 
   //              Tasks
   addNewTask: (data: ReceivedPostType) => {
     return instanse.post("tasks", data);
   },
-  getTask: (klass: string, subject: string, page: number, parallel: string) => {
+  getTask: (
+    klass: string,
+    subject: string,
+    page: number,
+    parallel: string
+  ): Promise<AxiosResponse<{ tasks: arrType[]; totalCount: number }>> => {
     return instanse.get(
       `tasks?klass=${klass}&subject=${subject}&page=${page}&parallel=${parallel}`
     );
   },
   deleteTask: (id: string) => {
     return instanse.delete(`tasks?id=${id}`);
+  },
+  editTask: (data: editPostType) => {
+    return instanse.put("tasks", data);
   },
   getTaskWithFilter: (
     klass: string,
@@ -84,6 +96,9 @@ export const API = {
   deleteProject: (id: string) => {
     return instanse.delete(`short-projects?id=${id}`);
   },
+  editShortProject: (data: editPostType) => {
+    return instanse.put("short-projects", data);
+  },
   getProjectWithFilter: (subject: string, filter: string) => {
     return instanse.get(
       `filter-short-projects?&subject=${subject}&filter=${filter}`
@@ -109,6 +124,9 @@ export const API = {
   },
   getProject: (subject: string, id: number) => {
     return instanse.get(`projects?&subject=${subject}&id=${id}`);
+  },
+  editFullProject: (data: editFullProjectType) => {
+    return instanse.put("projects", data);
   },
 };
 export default API;
