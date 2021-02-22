@@ -1,7 +1,7 @@
 import { CheckOutlined, EditOutlined } from "@ant-design/icons";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import { Button, Form, Input } from "antd";
 
 import {
@@ -11,12 +11,12 @@ import {
   projectType,
 } from "../../Reducers/addNewPostReducer";
 import style from "./Projects.module.css";
-import { editFullProjectType } from "../../Common/Common";
+import { editFullProjectType, re_auth_code } from "../../Common/Common";
 const FullProject = () => {
   const params: any = useParams();
   const state = useSelector((state: any) => state.addPostReducer.projects);
   const dispatch = useDispatch();
-
+  const history = useHistory();
   useEffect(() => {
     dispatch(getProjectT(params.id));
     return () => {
@@ -25,6 +25,9 @@ const FullProject = () => {
   }, []);
 
   const [editMode, setEditMode] = useState(false);
+  const statusCode = useSelector(
+    (state: any) => state.addPostReducer.statusCode
+  );
 
   const editProject = (v: editFullProjectType, id: string) => {
     v.id = id;
@@ -32,6 +35,7 @@ const FullProject = () => {
     if (v.tasks) v.tasks = v.tasks.split(",");
 
     dispatch(editFullProjectT(v));
+
     setEditMode(false);
   };
   const startEditProject = () => {

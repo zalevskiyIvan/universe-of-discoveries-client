@@ -14,7 +14,6 @@ export type arrType = {
   klass: any;
   subject: string;
   _id?: string;
-  // choise?: string;
   link?: string;
   description?: string;
   date: string;
@@ -117,6 +116,7 @@ const addPostReducer = (
         events: [],
         tasks: [],
         totalCount: 0,
+        statusCode: 0,
       };
     case "GET_USEFUL_LINK":
       return {
@@ -185,9 +185,8 @@ export type ReceivedPostType = {
 };
 
 const reAuthCheck = (status: number, dispatch: Dispatch<actionType>) => {
-  if (status === re_auth_code) {
-    dispatch(actions.statusCodeAC(status));
-  }
+  // if (status === re_auth_code) {
+  // }
 };
 
 export const editPostT = (data: editPostType, typeOfPost: string) => {
@@ -215,9 +214,10 @@ export const editPostT = (data: editPostType, typeOfPost: string) => {
 
 export const editFullProjectT = (data: editFullProjectType) => {
   return async (dispatch: Dispatch<actionType>) => {
-    debugger;
     const res = await API.editFullProject(data);
-    reAuthCheck(res.status, dispatch);
+    if (!res) {
+      return dispatch(actions.statusCodeAC(403));
+    }
     dispatch(actions.updateFulltProject(res.data, data.id));
   };
 };

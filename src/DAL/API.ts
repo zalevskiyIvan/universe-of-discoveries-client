@@ -125,8 +125,10 @@ export const API = {
   getProject: (subject: string, id: number) => {
     return instanse.get(`projects?&subject=${subject}&id=${id}`);
   },
-  editFullProject: (data: editFullProjectType) => {
-    return instanse.put("projects", data);
+  editFullProject: (
+    data: editFullProjectType
+  ): Promise<any | AxiosResponse<{ data: any }>> => {
+    return instanse.put("projects", data).catch((err) => {});
   },
 };
 export default API;
