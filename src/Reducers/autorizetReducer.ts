@@ -4,7 +4,6 @@ import { ActionTypes } from "../store";
 const initialState = {
   isAdmin: false,
   displayer: false,
-  token: null as null | string,
 };
 type stateType = typeof initialState;
 
@@ -31,10 +30,8 @@ export const actions = {
 export const getTokenT = (password: string) => {
   return async (dispatch: any) => {
     const res = await API.auth(password);
-    if (res.status === 200) {
-      dispatch(actions.setIsAdmin());
-      localStorage.auth = res.data.token;
-    }
+    dispatch(actions.setIsAdmin());
+    localStorage.auth = res.data.token;
   };
 };
 

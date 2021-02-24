@@ -1,6 +1,6 @@
 import { Button, Form, Input, Menu, Select } from "antd";
-import React, { memo, useState } from "react";
-import { useDispatch } from "react-redux";
+import React, { memo, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import style from "./Admins.module.css";
 import { Divider } from "antd";
 import {
@@ -12,13 +12,22 @@ import {
 } from "../../Reducers/addNewPostReducer";
 import { Link, useHistory } from "react-router-dom";
 import PendingProject from "./PendingProjects/PendingProject";
+import { re_auth_code } from "../../Common/Common";
 
 const { Option } = Select;
 
 const Admins = () => {
   const history = useHistory();
-  const dispatch = useDispatch();
 
+  // const statusCode = useSelector(
+  //   (state: any) => state.addPostReducer.statusCode
+  // );
+  // useEffect(() => {
+  //   if (statusCode === re_auth_code) {
+  //     localStorage.clear();
+  //     history.push("");
+  //   }
+  // });
   /////
 
   const [menu, setMenu] = useState("pendingProjects");
@@ -29,13 +38,14 @@ const Admins = () => {
     return (
       <div>
         {/* <div>
-          <Menu onClick={(e) => changePage(e.key)} mode="horizontal">
+          <Menu>
             <Menu.Item key="pendingProjects">
               Проекты в ожидании подтверждения
             </Menu.Item>
           </Menu>
         </div> */}
-        {menu === "pendingProjects" && <PendingProject />}
+        {/* {menu === "pendingProjects" && } */}
+        <PendingProject />
       </div>
 
       //   <div className={style.adder}>

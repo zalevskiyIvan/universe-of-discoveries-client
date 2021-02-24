@@ -12,17 +12,16 @@ type password = {
 
 const Teatcher = () => {
   const history = useHistory();
-  const [userPassword, setUserPassword] = useState("");
   const dispatch = useDispatch();
   const state = useSelector((state: any) => state.autorizetReducer);
 
   const setPassword = (v: password) => {
-    setUserPassword(v.password);
     if (v.password === correct_password) {
       dispatch(getTokenT(v.password));
       history.push("/menu");
     }
   };
+
   return (
     <div>
       <Form className={style.password} onFinish={setPassword}>
@@ -33,6 +32,7 @@ const Teatcher = () => {
         >
           <Input />
         </Form.Item>
+        <Button htmlType="submit">продолжить</Button>
       </Form>
     </div>
   );
@@ -64,12 +64,15 @@ const Student = () => {
 type displayerType = {
   display?: string;
 };
+
 const StartScreen = () => {
   const history = useHistory();
   const location = useLocation();
+
   if ((location.pathname === "/" && localStorage.klass) || localStorage.auth) {
     history.push("/menu");
   }
+
   const state = useSelector((state: any) => state.autorizetReducer);
 
   const [value, setValue] = useState(0);
@@ -77,11 +80,14 @@ const StartScreen = () => {
   const onValueChange = (e: any) => {
     setValue(e.target.value);
   };
+
   let displayStyle: displayerType = {
     display: "none",
   };
+
   if (state.displayer === true) displayStyle = { display: "none" };
   else displayStyle = {};
+
   return (
     <div style={displayStyle}>
       <div>

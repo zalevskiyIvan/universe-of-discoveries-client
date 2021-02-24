@@ -22,12 +22,11 @@ import {
   RightOutlined,
   LeftOutlined,
   SearchOutlined,
-  DeleteOutlined,
   CheckOutlined,
   PlusOutlined,
-  EditOutlined,
+  EllipsisOutlined,
 } from "@ant-design/icons";
-import { Button, Form, Input } from "antd";
+import { Button, Dropdown, Form, Input, Menu } from "antd";
 import { editPostType, re_auth_code } from "../../Common/Common";
 
 type propsType = {
@@ -60,7 +59,6 @@ const PostsRender: React.FC<propsType> = (props) => {
       history.push(`/${localStorage.subject}/project/${id}`);
     }
   };
-  console.log(statusCode);
   const re_authorization = () => {
     if (statusCode === re_auth_code) {
       localStorage.clear();
@@ -172,11 +170,13 @@ const PostsRender: React.FC<propsType> = (props) => {
 
   return (
     <div>
-      {!props.pending && localStorage.auth && (
-        <Button className={style.createProject} onClick={openAddPost}>
-          <PlusOutlined />
-        </Button>
-      )}
+      {(localStorage.auth && props.pending) ||
+        (props.type === "projects" && (
+          <Button className={style.createProject} onClick={openAddPost}>
+            <PlusOutlined />
+          </Button>
+        ))}
+
       <Input
         className={style.filter}
         onChange={(e) => addFilter(e)}
@@ -200,6 +200,36 @@ const PostsRender: React.FC<propsType> = (props) => {
         )}
       </div>
       {state.map((item: any) => {
+        const menu = (
+          <Menu style={{ width: 200 }}>
+            <Menu.Item>
+              <Button
+                style={{ border: "none" }}
+                onClick={() => editElement(item._id)}
+              >
+                Редактировать
+              </Button>
+            </Menu.Item>
+            <Menu.Item>
+              <Button
+                style={{ border: "none" }}
+                onClick={() => deleteElement(item._id)}
+              >
+                Удалить
+              </Button>
+            </Menu.Item>
+            {props.pending && (
+              <Menu.Item>
+                <Button
+                  style={{ border: "none" }}
+                  onClick={() => allowProject(item._id)}
+                >
+                  Разрешить
+                </Button>
+              </Menu.Item>
+            )}
+          </Menu>
+        );
         return (
           <div className={style.eventContainer} key={item._id}>
             <Form onFinish={(v) => editPost(v, item._id)}>
@@ -210,19 +240,16 @@ const PostsRender: React.FC<propsType> = (props) => {
               ) : (
                 <h2 style={{ color: "black", marginLeft: 40 }}>{item.date}</h2>
               )}
-
               <div className={style.controllButton}>
                 {localStorage.auth && !editMode && (
-                  <div>
-                    <DeleteOutlined
-                      className={style.delete}
-                      onClick={() => deleteElement(item._id)}
-                    />
-                    <EditOutlined onClick={() => editElement(item._id)} />
+                  <div className={style.dots}>
+                    <Dropdown placement="bottomRight" arrow overlay={menu}>
+                      <Button
+                        type="text"
+                        icon={<EllipsisOutlined style={{ fontSize: 30 }} />}
+                      ></Button>
+                    </Dropdown>
                   </div>
-                )}
-                {props.pending && (
-                  <CheckOutlined onClick={() => allowProject(item._id)} />
                 )}
               </div>
               <div

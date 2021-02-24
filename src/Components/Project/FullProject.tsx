@@ -16,7 +16,7 @@ const FullProject = () => {
   const params: any = useParams();
   const state = useSelector((state: any) => state.addPostReducer.projects);
   const dispatch = useDispatch();
-  const history = useHistory();
+
   useEffect(() => {
     dispatch(getProjectT(params.id));
     return () => {
@@ -25,9 +25,6 @@ const FullProject = () => {
   }, []);
 
   const [editMode, setEditMode] = useState(false);
-  const statusCode = useSelector(
-    (state: any) => state.addPostReducer.statusCode
-  );
 
   const editProject = (v: editFullProjectType, id: string) => {
     v.id = id;

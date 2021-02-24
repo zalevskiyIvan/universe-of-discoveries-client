@@ -209,6 +209,9 @@ export const editPostT = (data: editPostType, typeOfPost: string) => {
         dispatch(actions.updateShortProject(res.data, data.id));
         break;
     }
+    if (!res) {
+      return dispatch(actions.statusCodeAC(403));
+    }
   };
 };
 
@@ -234,6 +237,9 @@ export const addEventT = (
     const data: ReceivedPostType = { klass, header, body, img, subject, date };
     const res = await API.addNewEvent(data);
     reAuthCheck(res.status, dispatch);
+    if (!res) {
+      return dispatch(actions.statusCodeAC(403));
+    }
     if (res.status === 201) {
       dispatch(actions.statusCodeAC(res.status));
     }
@@ -252,8 +258,8 @@ export const getEventT = (page: number) => {
 export const deleteEventT = (id: string) => {
   return async (dispatch: Dispatch<actionType>) => {
     const res = await API.deleteEvent(id);
-    if (res.status === re_auth_code) {
-      dispatch(actions.statusCodeAC(res.status));
+    if (!res) {
+      return dispatch(actions.statusCodeAC(403));
     }
     dispatch(actions.deleteEventsAC(id));
   };
@@ -282,8 +288,8 @@ export const addTaskT = (
   return async (dispatch: Dispatch<actionType>) => {
     const data = { klass, header, body, img, subject, date };
     const res = await API.addNewTask(data);
-    if (res.status === re_auth_code) {
-      dispatch(actions.statusCodeAC(res.status));
+    if (!res) {
+      return dispatch(actions.statusCodeAC(403));
     }
     if (res.status === 201) {
       dispatch(actions.statusCodeAC(res.status));
@@ -304,8 +310,8 @@ export const getTaskT = (page: number) => {
 export const deleteTaskT = (id: string) => {
   return async (dispatch: Dispatch<actionType>) => {
     const res = await API.deleteTask(id);
-    if (res.status === re_auth_code) {
-      dispatch(actions.statusCodeAC(res.status));
+    if (!res) {
+      return dispatch(actions.statusCodeAC(403));
     }
     dispatch(actions.deleteTaskAC(id));
   };
@@ -326,8 +332,8 @@ export const getTaskWithFilterT = (filter: string) => {
 export const addUsefulLinkT = (link: string, description: string) => {
   return async (dispatch: Dispatch<actionType>) => {
     const res = await API.addNewUsefulLink(link, description);
-    if (res.status == re_auth_code) {
-      dispatch(actions.statusCodeAC(res.status));
+    if (!res) {
+      return dispatch(actions.statusCodeAC(403));
     }
   };
 };
@@ -368,8 +374,8 @@ export const getShortProjectT = (page: number) => {
 export const deleteProjectT = (id: string) => {
   return async (dispatch: Dispatch<actionType>) => {
     const res = await API.deleteProject(id);
-    if (res.status == re_auth_code) {
-      dispatch(actions.statusCodeAC(res.status));
+    if (!res) {
+      return dispatch(actions.statusCodeAC(403));
     }
     dispatch(actions.deleteProjectAC(id));
   };
@@ -386,8 +392,8 @@ export const getPendingProjectWithFilterT = (filter: string) => {
   const subject = localStorage.subject;
   return async (dispatch: Dispatch<actionType>) => {
     const res = await API.getPendingProjectWithFilter(subject, filter);
-    if (res.status == re_auth_code) {
-      dispatch(actions.statusCodeAC(res.status));
+    if (!res) {
+      return dispatch(actions.statusCodeAC(403));
     }
     dispatch(actions.getShortProjectAC(res.data, res.data.length));
   };
@@ -401,6 +407,9 @@ export type imgArr = {
 export const addProjectT = (data: projectType) => {
   return async (dispatch: Dispatch<actionType>) => {
     const res = await API.addProject(data);
+    if (!res) {
+      return dispatch(actions.statusCodeAC(403));
+    }
   };
 };
 
@@ -416,8 +425,8 @@ export const getPendingProjectT = (page: number) => {
   const subject = localStorage.subject;
   return async (dispatch: Dispatch<actionType>) => {
     const res = await API.getPendingProject(subject, page);
-    if (res.status == re_auth_code) {
-      dispatch(actions.statusCodeAC(res.status));
+    if (!res) {
+      return dispatch(actions.statusCodeAC(403));
     }
     dispatch(actions.getShortProjectAC(res.data.projects, res.data.totalCount));
   };
@@ -426,8 +435,8 @@ export const getPendingProjectT = (page: number) => {
 export const allowProjectT = (id: string) => {
   return async (dispatch: Dispatch<actionType>) => {
     const res = await API.allowProject(id);
-    if (res.status == re_auth_code) {
-      dispatch(actions.statusCodeAC(res.status));
+    if (!res) {
+      return dispatch(actions.statusCodeAC(403));
     }
     dispatch(actions.deleteProjectAC(res.data));
   };

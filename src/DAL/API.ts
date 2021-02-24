@@ -8,8 +8,8 @@ const instanse = axios.create({
   headers: {
     "Access-Control-Allow-Origin": "*",
     "Content-Type": "application/json",
-    Authorization: `Bearer ${localStorage.auth}`,
   },
+  withCredentials: true,
 });
 
 export const API = {
@@ -104,7 +104,10 @@ export const API = {
       `filter-short-projects?&subject=${subject}&filter=${filter}`
     );
   },
-  getPendingProject: (subject: string, page: number) => {
+  getPendingProject: (
+    subject: string,
+    page: number
+  ): Promise<AxiosResponse<{ projects: arrType[]; totalCount: number }>> => {
     return instanse.get(
       `pending-short-projects?&subject=${subject}&page=${page}`
     );
