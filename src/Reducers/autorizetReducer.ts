@@ -31,7 +31,7 @@ export const getTokenT = (password: string) => {
   return async (dispatch: any) => {
     const res = await API.auth(password);
     dispatch(actions.setIsAdmin());
-    localStorage.auth = res.data.token;
+    localStorage.setItem("auth", res.data.token);
   };
 };
 
