@@ -1,5 +1,8 @@
 export const re_auth_code = 403;
 export const correct_password = "tyghcn";
+export const chairsCount = 6;
+
+//   TYPES:
 export type editPostType = {
   body: string | undefined;
   shortDescription: string | undefined;
@@ -20,4 +23,13 @@ export type editFullProjectType = {
   shortDescription: string | undefined;
   id: string;
   members: any;
+};
+export type subjectType = {
+  subject: string;
+  url: string;
+};
+export type chairType = {
+  title: string;
+  subjects: subjectType[];
+  teachers: string[];
 };

@@ -1,118 +1,82 @@
-import { Button, Form, Input, Radio } from "antd";
-import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useHistory, useLocation } from "react-router-dom";
-import { getTokenT } from "../../Reducers/autorizetReducer";
-import { correct_password } from "../../Common/Common";
+import { LeftCircleOutlined, RightCircleOutlined } from "@ant-design/icons";
+import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
+import { chairsCount, subjectType } from "../../Common/Common";
+import { useTypedSelector } from "../../Common/hooks";
+import { actions } from "../../Reducers/addNewPostReducer";
+import { getChairT } from "../../Reducers/cheirsReducer";
 import style from "./StartMenu.module.css";
 
-type password = {
-  password: string;
-};
+const BigPaper = () => {
+  const state = useTypedSelector((state) => state.chairReducer.chair);
 
-const Teatcher = () => {
-  const history = useHistory();
   const dispatch = useDispatch();
-  const state = useSelector((state: any) => state.autorizetReducer);
 
-  const setPassword = (v: password) => {
-    if (v.password === correct_password) {
-      dispatch(getTokenT(v.password));
-      history.push("/menu");
-    }
+  const [page, setPage] = useState(1);
+
+  const goNextPage = () => {
+    if (page < chairsCount) setPage(page + 1);
+    dispatch(getChairT(page));
+    dispatch(actions.clear());
   };
+  const goBack = () => {
+    if (page > 1) setPage(page - 1);
+    dispatch(getChairT(page));
+
+    dispatch(actions.clear());
+  };
+  return (
+    <div className={style.BigPaper}>
+      {state?.subjects && (
+        <div>
+          <h2>{state?.title}</h2>
+          <div className={style.subjects}>
+            <ul>
+              {state?.subjects.map((item: subjectType) => (
+                <Link to={item.url}>
+                  <li>{item.subject}</li>
+                </Link>
+              ))}
+            </ul>
+          </div>
+          <p className={style.teatchers}>
+            <h3>Учителя:</h3>
+            {state?.teachers.map((teacher: string) => {
+              return <span>{teacher}; </span>;
+            })}
+          </p>
+          {page > 1 && (
+            <LeftCircleOutlined onClick={goBack} className={style.back} />
+          )}
+          {page < chairsCount && (
+            <RightCircleOutlined
+              onClick={goNextPage}
+              className={style.forward}
+            />
+          )}
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default function StartScreen() {
+  const dispatch = useDispatch();
+  const [page, setPage] = useState(1);
+
+  useEffect(() => {
+    dispatch(getChairT(page));
+  }, [page]);
 
   return (
     <div>
-      <Form className={style.password} onFinish={setPassword}>
-        <Form.Item
-          hasFeedback={state.isAdmin ? false : true}
-          validateStatus={state.isAdmin ? "" : "error"}
-          name="password"
-        >
-          <Input />
-        </Form.Item>
-        <Button htmlType="submit">продолжить</Button>
-      </Form>
+      <div className={style.smallPaper1} />
+      <BigPaper />
+      <div className={style.smallPaper2} />
+      <div className={style.smallPaper3} />
+      <div className={style.smallPaper4} />
+      <div className={style.smallPaper5} />
     </div>
   );
-};
-
-const Student = () => {
-  const history = useHistory();
-  type klassType = {
-    klass: string;
-  };
-  const onFinish = (v: klassType) => {
-    localStorage.klass = v.klass.toLowerCase();
-    localStorage.parallel = v.klass.split("")[0];
-    history.push("/menu");
-  };
-
-  return (
-    <div>
-      <Form onFinish={onFinish}>
-        <Form.Item name="klass">
-          <Input placeholder="введите свой класс" />
-        </Form.Item>
-        <Button htmlType="submit">продолжить</Button>
-      </Form>
-    </div>
-  );
-};
-
-type displayerType = {
-  display?: string;
-};
-
-const StartScreen = () => {
-  const history = useHistory();
-  const location = useLocation();
-
-  if ((location.pathname === "/" && localStorage.klass) || localStorage.auth) {
-    history.push("/menu");
-  }
-
-  const state = useSelector((state: any) => state.autorizetReducer);
-
-  const [value, setValue] = useState(0);
-
-  const onValueChange = (e: any) => {
-    setValue(e.target.value);
-  };
-
-  let displayStyle: displayerType = {
-    display: "none",
-  };
-
-  if (state.displayer === true) displayStyle = { display: "none" };
-  else displayStyle = {};
-
-  return (
-    <div style={displayStyle}>
-      <div>
-        <h1 className={style.world_ar}>Мир вокруг нас</h1>
-        <p className={style.quot}>
-          "Весь огромный мир вокруг Меня...полон неизведанных Тайн. И я буду их
-          открывать всю жизнь, потому что это самое интересное, самое
-          увлекательное занятие в мире"
-        </p>
-      </div>
-      <div className={style.radio}>
-        <Radio.Group value={value} onChange={onValueChange}>
-          <Radio value={1}>
-            <span className={style.radioText}>Учитель</span>
-          </Radio>
-          <Radio value={2}>
-            <span className={style.radioText}>Ученик</span>
-          </Radio>
-        </Radio.Group>
-      </div>
-      <div className={style.continue}>
-        {value === 1 && <Teatcher />}
-        {value === 2 && <Student />}
-      </div>
-    </div>
-  );
-};
-export default StartScreen;
+}

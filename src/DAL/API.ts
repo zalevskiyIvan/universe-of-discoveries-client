@@ -1,10 +1,10 @@
 import axios, { AxiosResponse } from "axios";
-import { editPostType, editFullProjectType } from "../Common/Common";
+import { editPostType, editFullProjectType, chairType } from "../Common/Common";
 import { arrType, ReceivedPostType } from "../Reducers/addNewPostReducer";
 
 const instanse = axios.create({
-  baseURL: "https://universe-of-discoveries-server.herokuapp.com/api/",
-  // baseURL: "http://localhost:3001/api/",
+  // baseURL: "https://universe-of-discoveries-server.herokuapp.com/api/",
+  baseURL: "http://localhost:3001/api/",
   headers: {
     "Access-Control-Allow-Origin": "*",
     "Content-Type": "application/json",
@@ -16,7 +16,9 @@ export const API = {
   auth: (password: string) => {
     return instanse.post("auth", { password });
   },
-
+  getChair: (page: number): Promise<AxiosResponse<chairType>> => {
+    return instanse.get(`chairs?page=${page}`);
+  },
   //              Events
   addNewEvent: (
     data: ReceivedPostType

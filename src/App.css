@@ -1,12 +1,15 @@
 @import url("https://fonts.googleapis.com/css2?family=Alegreya+Sans&display=swap");
 
 .App {
-  background-color: rgb(28, 29, 87);
+  background-color: rgb(122, 228, 140);
   width: 100%;
   height: 100%;
-  font-family: "Alegreya Sans", sans-serif;
+  font-family: "Nanum Gothic", sans-serif;
 }
 .helpers {
   margin-left: 80%;
   padding-top: 20px;
+}
+html {
+  overflow-x: hidden;
 }

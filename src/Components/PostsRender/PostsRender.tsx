@@ -167,15 +167,14 @@ const PostsRender: React.FC<propsType> = (props) => {
     dispatch(editPostT(v, props.type));
     setEditMode(false);
   };
-
+  const token = localStorage.getItem("auth");
   return (
     <div>
-      {(localStorage.auth && props.pending) ||
-        (props.type === "projects" && (
-          <Button className={style.createProject} onClick={openAddPost}>
-            <PlusOutlined />
-          </Button>
-        ))}
+      {(token || props.type === "projects") && (
+        <Button className={style.createProject} onClick={openAddPost}>
+          <PlusOutlined />
+        </Button>
+      )}
 
       <Input
         className={style.filter}

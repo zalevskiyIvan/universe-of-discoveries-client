@@ -1,10 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import style from "./PageMenu.module.css";
 
 const PageMenu = (props: any) => {
   const history = useHistory();
   const params: any = useParams();
+
+  useEffect(() => {
+    localStorage.setItem("subject", `${params.subject}`);
+  }, []);
   const eventsHistory = () => {
     history.push(`/${params.subject}/events`);
   };

@@ -1,9 +1,8 @@
-import React, { useEffect } from "react";
-import { BrowserRouter, Route, Switch, useHistory } from "react-router-dom";
+import React from "react";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
 import "antd/dist/antd.css";
 import "./App.css";
 import StartScreen from "./Components/StartScreen/StartScreen";
-import SubjectMenu from "./Components/ChoiseSubject/MainPage";
 import PageMenu from "./Components/PageMenu/PageMenu";
 import Admins from "./Components/Admins/Admins";
 import Menu from "./Components/TopMenu/TopMenu";
@@ -14,9 +13,6 @@ import CreateProject from "./Components/Project/CreateProject";
 import PostsRender from "./Components/PostsRender/PostsRender";
 import Logaut from "./Components/Logaut/Logaut";
 import CreatePost from "./Components/CreatePost/CreatePost";
-import { re_auth_code } from "./Common/Common";
-import { useSelector } from "react-redux";
-import { Button, Dropdown } from "antd";
 
 const App = () => {
   return (
@@ -86,14 +82,9 @@ const App = () => {
               </div>
             )}
           />
-          <Route path="/menu" exact render={() => <SubjectMenu />} />
           <Route path="/:subject" render={() => <PageMenu />} />
           <Route path="/" exact render={() => <StartScreen />} />
         </Switch>
-
-        {/* <div className="footer">
-          <span>По вопросам: infsiteadm@gmail.com</span>
-        </div> */}
       </div>
     </BrowserRouter>
   );
