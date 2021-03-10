@@ -1,14 +1,12 @@
 @import url("https://fonts.googleapis.com/css2?family=Alegreya+Sans&display=swap");
 
 .App {
-  position: absolute;
-  left: 0;
-  right: 0;
+  position: fixed;
   top: 0;
-  bottom: 0;
-  background-color: rgb(192, 192, 192);
+  left: 0;
   width: 100%;
   height: 100%;
+  background-color: rgb(192, 192, 192);
   font-family: "Nanum Gothic", sans-serif;
 }
 .helpers {
