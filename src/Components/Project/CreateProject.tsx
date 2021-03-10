@@ -2,11 +2,17 @@ import React, { useState } from "react";
 import { Button, Form, Input, Select } from "antd";
 import { addProjectT } from "../../Reducers/addNewPostReducer";
 import { useDispatch } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
+import { paramsType } from "../../Common/Common";
+import { useTypedSelector } from "../../Common/hooks";
 
 const CreateProject = () => {
   const history = useHistory();
   const dispatch = useDispatch();
+  const params: paramsType = useParams();
+  const subject = params.subject;
+  const isAdmin = useTypedSelector((state) => state.autorizetReducer.isAdmin);
+
   const [img, setImg] = useState([{ id: 1, imgURL: "" }]);
   const [itemId, setItemId] = useState(2);
   const addItem = () => {
@@ -21,13 +27,13 @@ const CreateProject = () => {
   const onFinish = (v: any) => {
     v.img = img;
     v.date = new Date().toLocaleDateString();
-    v.subject = localStorage.subject;
+    v.subject = subject;
     v.members = v.members.split(",");
     v.tasks = v.tasks.split(",");
-    if (localStorage.auth) v.allowed = true;
+    if (isAdmin) v.allowed = true;
     else v.allowed = false;
     dispatch(addProjectT(v));
-    history.push(`/${localStorage.subject}/project`);
+    history.push(`/${subject}/project`);
   };
   return (
     <div>

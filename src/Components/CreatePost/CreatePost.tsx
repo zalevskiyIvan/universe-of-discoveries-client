@@ -7,11 +7,19 @@ import {
 } from "../../Reducers/addNewPostReducer";
 import { Button, Divider, Form, Input } from "antd";
 import style from "./CreatePost.module.css";
-import { useHistory, useLocation } from "react-router-dom";
+import { useHistory, useLocation, useParams } from "react-router-dom";
+import { paramsType } from "../../Common/Common";
+import { useTypedSelector } from "../../Common/hooks";
 //
 export default function CreatePost() {
   const dispatch = useDispatch();
   const history = useHistory();
+  const params: paramsType = useParams();
+  const subject = params.subject;
+  const location = useLocation();
+  const postType = location.pathname.split("/")[2];
+  const isAdmin = useTypedSelector((state) => state.autorizetReducer.isAdmin);
+
   const statusCode = useSelector(
     (state: any) => state.addPostReducer.statusCode
   );
@@ -22,22 +30,34 @@ export default function CreatePost() {
     }
   };
   ////
-  const location = useLocation();
-  const postType = location.pathname.split("/")[2];
 
   const add = (v: any) => {
     if (!v.date) v.date = new Date().toLocaleDateString();
-    if (localStorage.auth) {
+    if (isAdmin) {
       switch (postType) {
         case "events":
           dispatch(
-            addEventT(v.klass.toLowerCase(), v.header, v.body, v.img, v.date)
+            addEventT(
+              v.klass.toLowerCase(),
+              v.header,
+              v.body,
+              v.img,
+              v.date,
+              subject
+            )
           );
           re_authorization(403);
           break;
         case "tasks":
           dispatch(
-            addTaskT(v.klass.toLowerCase(), v.header, v.body, v.img, v.date)
+            addTaskT(
+              v.klass.toLowerCase(),
+              v.header,
+              v.body,
+              v.img,
+              v.date,
+              subject
+            )
           );
           re_authorization(403);
           break;
@@ -50,7 +70,7 @@ export default function CreatePost() {
     } else alert("У вас нет прав");
   };
 
-  if (localStorage.auth) {
+  if (isAdmin) {
     return (
       <div className={style.adder}>
         <Form onFinish={add}>

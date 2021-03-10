@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
+import { paramsType } from "../../Common/Common";
 import {
+  actions,
   getEventT,
   getShortProjectT,
   getTaskT,
@@ -9,31 +11,33 @@ import {
 import style from "./Menu.module.css";
 const Menu = () => {
   const history = useHistory();
-  const params: any = useParams();
+  const params: paramsType = useParams();
   const dispatch = useDispatch();
 
   const events = () => {
-    dispatch(getEventT(1));
+    dispatch(getEventT(1, params.subject));
     history.push(`/${params.subject}/events`);
   };
   const links = () => {
     history.push(`/${params.subject}/links`);
   };
   const projects = () => {
-    dispatch(getShortProjectT(1));
+    dispatch(getShortProjectT(1, params.subject));
     history.push(`/${params.subject}/project`);
   };
   const tasks = () => {
-    dispatch(getTaskT(1));
+    dispatch(getTaskT(1, params.subject));
     history.push(`/${params.subject}/tasks`);
   };
-  // const about = () => {
-  //   history.push(`/${params.subject}/about`);
-  // };
+
   const subject = () => {
     history.push(`/menu`);
   };
-
+  useEffect(() => {
+    return () => {
+      dispatch(actions.clear());
+    };
+  });
   return (
     <div style={{ marginTop: 100 }}>
       <ul className={style.ul}>

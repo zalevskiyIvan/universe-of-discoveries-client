@@ -3,8 +3,8 @@ import { editPostType, editFullProjectType, chairType } from "../Common/Common";
 import { arrType, ReceivedPostType } from "../Reducers/addNewPostReducer";
 
 const instanse = axios.create({
-  // baseURL: "https://universe-of-discoveries-server.herokuapp.com/api/",
-  baseURL: "http://localhost:3001/api/",
+  baseURL: "https://universe-of-discoveries-server.herokuapp.com/api/",
+  // baseURL: "http://localhost:3001/api/",
   headers: {
     "Access-Control-Allow-Origin": "*",
     "Content-Type": "application/json",
@@ -106,22 +106,22 @@ export const API = {
       `filter-short-projects?&subject=${subject}&filter=${filter}`
     );
   },
-  getPendingProject: (
-    subject: string,
-    page: number
-  ): Promise<AxiosResponse<{ projects: arrType[]; totalCount: number }>> => {
-    return instanse.get(
-      `pending-short-projects?&subject=${subject}&page=${page}`
-    );
-  },
+  // getPendingProject: (
+  //   subject: string,
+  //   page: number
+  // ): Promise<AxiosResponse<{ projects: arrType[]; totalCount: number }>> => {
+  //   return instanse.get(
+  //     `pending-short-projects?&subject=${subject}&page=${page}`
+  //   );
+  // },
   allowProject: (id: string) => {
     return instanse.get(`allow-short-projects?&id=${id}`);
   },
-  getPendingProjectWithFilter: (subject: string, filter: string) => {
-    return instanse.get(
-      `pending-filter-short-projects?&subject=${subject}&filter=${filter}`
-    );
-  },
+  // getPendingProjectWithFilter: (subject: string, filter: string) => {
+  //   return instanse.get(
+  //     `pending-filter-short-projects?&subject=${subject}&filter=${filter}`
+  //   );
+  // },
 
   //              FullProjects
   addProject: (body: any) => {

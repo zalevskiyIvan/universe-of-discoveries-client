@@ -1,9 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import "antd/dist/antd.css";
 import "./App.css";
 import StartScreen from "./Components/StartScreen/StartScreen";
-import PageMenu from "./Components/PageMenu/PageMenu";
 import Admins from "./Components/Admins/Admins";
 import Menu from "./Components/TopMenu/TopMenu";
 import AboutUs from "./Components/AboutUs/AboutUs";
@@ -13,8 +12,15 @@ import CreateProject from "./Components/Project/CreateProject";
 import PostsRender from "./Components/PostsRender/PostsRender";
 import Logaut from "./Components/Logaut/Logaut";
 import CreatePost from "./Components/CreatePost/CreatePost";
+import PostTypeMenu from "./Components/PageMenu/PostTypeMenu";
+import { actions } from "./Reducers/autorizetReducer";
+import { useDispatch } from "react-redux";
 
 const App = () => {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (localStorage.getItem("auth")) dispatch(actions.setIsAdmin(true));
+  }, []);
   return (
     <BrowserRouter>
       <div className="App">
@@ -82,7 +88,7 @@ const App = () => {
               </div>
             )}
           />
-          <Route path="/:subject" render={() => <PageMenu />} />
+          <Route path="/:subject" render={() => <PostTypeMenu />} />
           <Route path="/" exact render={() => <StartScreen />} />
         </Switch>
       </div>

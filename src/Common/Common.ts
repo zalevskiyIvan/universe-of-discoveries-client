@@ -33,3 +33,14 @@ export type chairType = {
   subjects: subjectType[];
   teachers: string[];
 };
+export type paramsType = {
+  subject: string;
+};
+
+export type responseProject = {
+  allowed: boolean;
+  date: string;
+  header: string;
+  shortDescription: string;
+  _id: string;
+};

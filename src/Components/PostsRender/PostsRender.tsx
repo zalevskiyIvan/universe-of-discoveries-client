@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { useHistory, useParams } from "react-router-dom";
 import {
   getEventT,
   getTaskT,
@@ -11,11 +11,10 @@ import {
   deleteProjectT,
   deleteTaskT,
   allowProjectT,
-  getPendingProjectT,
   getShortProjectT,
   actions,
-  getPendingProjectWithFilterT,
   editPostT,
+  ReceivedPostType,
 } from "../../Reducers/addNewPostReducer";
 import style from "./PostsRender.module.css";
 import {
@@ -27,7 +26,13 @@ import {
   EllipsisOutlined,
 } from "@ant-design/icons";
 import { Button, Dropdown, Form, Input, Menu } from "antd";
-import { editPostType, re_auth_code } from "../../Common/Common";
+import {
+  editPostType,
+  paramsType,
+  responseProject,
+  re_auth_code,
+} from "../../Common/Common";
+import { useTypedSelector } from "../../Common/hooks";
 
 type propsType = {
   type: string;
@@ -35,7 +40,13 @@ type propsType = {
 };
 
 const PostsRender: React.FC<propsType> = (props) => {
-  const state = useSelector((state: any) => {
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const params: paramsType = useParams();
+  const subject = params.subject;
+  const isAdmin = useTypedSelector((state) => state.autorizetReducer.isAdmin);
+
+  let state = useTypedSelector((state: any) => {
     switch (props.type) {
       case "events":
         return state.addPostReducer.events;
@@ -45,18 +56,16 @@ const PostsRender: React.FC<propsType> = (props) => {
         return state.addPostReducer.shortProjects;
     }
   });
-  const statusCode = useSelector(
-    (state: any) => state.addPostReducer.statusCode
+  const statusCode = useTypedSelector(
+    (state) => state.addPostReducer.statusCode
   );
-  const totalPostCount = useSelector(
-    (state: any) => state.addPostReducer.totalCount
+  const totalPostCount = useTypedSelector(
+    (state) => state.addPostReducer.totalCount
   );
-  const dispatch = useDispatch();
-  const history = useHistory();
 
   const openProject = (id: string) => {
-    if (history.location.pathname === `/${localStorage.subject}/project`) {
-      history.push(`/${localStorage.subject}/project/${id}`);
+    if (history.location.pathname === `/${subject}/project`) {
+      history.push(`/${subject}/project/${id}`);
     }
   };
   const re_authorization = () => {
@@ -66,7 +75,10 @@ const PostsRender: React.FC<propsType> = (props) => {
     }
   };
   const [page, setPage] = useState(1);
-
+  useEffect(() => {
+    setPage(1);
+    dispatch(actions.clear());
+  }, [props.type]);
   const forward = () => {
     setPage(page + 1);
   };
@@ -74,16 +86,15 @@ const PostsRender: React.FC<propsType> = (props) => {
     if (page !== 1) setPage(page - 1);
   };
   const pageProject = () => {
-    if (props.pending) dispatch(getPendingProjectT(page));
-    if (!props.pending) dispatch(getShortProjectT(page));
+    dispatch(getShortProjectT(page, subject));
   };
   useEffect(() => {
     switch (props.type) {
       case "events":
-        dispatch(getEventT(page));
+        dispatch(getEventT(page, subject));
         break;
       case "tasks":
-        dispatch(getTaskT(page));
+        dispatch(getTaskT(page, subject));
         break;
       case "projects":
         pageProject();
@@ -95,7 +106,6 @@ const PostsRender: React.FC<propsType> = (props) => {
   }, [page]);
 
   const openAddPost = () => {
-    const subject = localStorage.subject;
     if (props.type === "projects") history.push(`/${subject}/create-project`);
     else history.push(`/${subject}/${props.type}/create`);
   };
@@ -106,25 +116,23 @@ const PostsRender: React.FC<propsType> = (props) => {
     if (e.target.value) {
       switch (props.type) {
         case "tasks":
-          dispatch(getTaskWithFilterT(e.target.value));
+          dispatch(getTaskWithFilterT(e.target.value, subject));
           break;
         case "events":
-          dispatch(getEventsWithFilterT(e.target.value));
+          dispatch(getEventsWithFilterT(e.target.value, subject));
           break;
         case "projects":
-          if (props.pending) {
-            dispatch(getPendingProjectWithFilterT(e.target.value));
-          } else dispatch(getShortProjectWithFilterT(e.target.value));
+          dispatch(getShortProjectWithFilterT(e.target.value, subject));
           break;
       }
       setFilterMod(true);
     } else
       switch (props.type) {
         case "events":
-          dispatch(getEventT(page));
+          dispatch(getEventT(page, subject));
           break;
         case "tasks":
-          dispatch(getTaskT(page));
+          dispatch(getTaskT(page, subject));
           break;
         case "projects":
           pageProject();
@@ -167,15 +175,16 @@ const PostsRender: React.FC<propsType> = (props) => {
     dispatch(editPostT(v, props.type));
     setEditMode(false);
   };
-  const token = localStorage.getItem("auth");
+
+  if (!isAdmin)
+    state = state.filter((item: responseProject) => item.allowed === true);
   return (
-    <div>
-      {(token || props.type === "projects") && (
+    <div className={style.main}>
+      {(isAdmin || props.type === "projects") && (
         <Button className={style.createProject} onClick={openAddPost}>
           <PlusOutlined />
         </Button>
       )}
-
       <Input
         className={style.filter}
         onChange={(e) => addFilter(e)}
@@ -217,7 +226,7 @@ const PostsRender: React.FC<propsType> = (props) => {
                 Удалить
               </Button>
             </Menu.Item>
-            {props.pending && (
+            {!item.allowed && (
               <Menu.Item>
                 <Button
                   style={{ border: "none" }}
@@ -240,7 +249,7 @@ const PostsRender: React.FC<propsType> = (props) => {
                 <h2 style={{ color: "black", marginLeft: 40 }}>{item.date}</h2>
               )}
               <div className={style.controllButton}>
-                {localStorage.auth && !editMode && (
+                {isAdmin && !editMode && (
                   <div className={style.dots}>
                     <Dropdown placement="bottomRight" arrow overlay={menu}>
                       <Button
@@ -281,7 +290,7 @@ const PostsRender: React.FC<propsType> = (props) => {
                   <p className={style.body}>{item.body}</p>
                 )}
               </div>
-              {localStorage.auth && editMode && editingPostID === item._id && (
+              {isAdmin && editMode && editingPostID === item._id && (
                 <Button
                   size="large"
                   icon={<CheckOutlined />}

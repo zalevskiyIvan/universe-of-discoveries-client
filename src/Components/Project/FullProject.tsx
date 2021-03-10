@@ -11,14 +11,18 @@ import {
   projectType,
 } from "../../Reducers/addNewPostReducer";
 import style from "./Projects.module.css";
-import { editFullProjectType, re_auth_code } from "../../Common/Common";
+import {
+  editFullProjectType,
+  paramsType,
+  re_auth_code,
+} from "../../Common/Common";
 const FullProject = () => {
   const params: any = useParams();
   const state = useSelector((state: any) => state.addPostReducer.projects);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getProjectT(params.id));
+    dispatch(getProjectT(params.id, params.subject));
     return () => {
       dispatch(actions.clear());
     };
@@ -84,7 +88,7 @@ const FullProject = () => {
                 )}
               </div>
               <div className={style.purpose}>
-                <h2 className={style.headers}>Цель проекта:</h2>
+                <h2 className={style.headers}>Цель:</h2>
                 {editMode && (
                   <Form.Item name="purpose">
                     <Input defaultValue={item.purpose} />
@@ -93,7 +97,7 @@ const FullProject = () => {
                 {!editMode && <p>{item.purpose}</p>}
               </div>
               <div className={style.tasks}>
-                <h2 className={style.headers}>Задачи проекта:</h2>
+                <h2 className={style.headers}>Задачи:</h2>
                 {!editMode && (
                   <ul>
                     {item.tasks.map((item: any) => {
@@ -108,7 +112,7 @@ const FullProject = () => {
                 )}
               </div>
               <div className={style.relevance}>
-                <h2 className={style.headers}>Актуальность проекта:</h2>
+                <h2 className={style.headers}>Актуальность:</h2>
                 {editMode && (
                   <Form.Item name="relevance">
                     <Input defaultValue={item.relevance} />

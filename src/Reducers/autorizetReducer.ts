@@ -1,9 +1,9 @@
+import { Dispatch } from "react";
 import API from "../DAL/API";
 import { ActionTypes } from "../store";
 
 const initialState = {
   isAdmin: false,
-  displayer: false,
 };
 type stateType = typeof initialState;
 
@@ -15,8 +15,7 @@ const autorizetReducer = (
     case "SET_IS_ADMIN":
       return {
         ...state,
-        isAdmin: true,
-        displayer: true,
+        isAdmin: action.isAdmin,
       };
     default:
       return state;
@@ -24,13 +23,14 @@ const autorizetReducer = (
 };
 type actionType = ActionTypes<typeof actions>;
 export const actions = {
-  setIsAdmin: () => ({ type: "SET_IS_ADMIN" } as const),
+  setIsAdmin: (isAdmin: boolean) =>
+    ({ type: "SET_IS_ADMIN", isAdmin } as const),
 };
 
 export const getTokenT = (password: string) => {
-  return async (dispatch: any) => {
+  return async (dispatch: Dispatch<actionType>) => {
     const res = await API.auth(password);
-    dispatch(actions.setIsAdmin());
+    dispatch(actions.setIsAdmin(true));
     localStorage.setItem("auth", res.data.token);
   };
 };

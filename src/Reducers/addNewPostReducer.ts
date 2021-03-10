@@ -162,10 +162,8 @@ export const actions = {
   getFullProjectAC: (...project: any) =>
     ({ type: "GET_FULL_PROJECT", project } as const),
   //
-  updateFulltProject: (
-    updatedProject: any, // FIX
-    id: string
-  ) => ({ type: "UPDATE_FULL_PROJECT", updatedProject, id } as const),
+  updateFulltProject: (updatedProject: any, id: string) =>
+    ({ type: "UPDATE_FULL_PROJECT", updatedProject, id } as const),
   //
   clear: () => ({ type: "CLEAR" } as const),
   //
@@ -184,28 +182,20 @@ export type ReceivedPostType = {
   date: string;
 };
 
-const reAuthCheck = (status: number, dispatch: Dispatch<actionType>) => {
-  // if (status === re_auth_code) {
-  // }
-};
-
 export const editPostT = (data: editPostType, typeOfPost: string) => {
   return async (dispatch: Dispatch<actionType>) => {
     let res;
     switch (typeOfPost) {
       case "events":
         res = await API.editEvents(data);
-        reAuthCheck(res.status, dispatch);
         dispatch(actions.updateEvent(res.data, data.id));
         break;
       case "tasks":
         res = await API.editTask(data);
-        reAuthCheck(res.status, dispatch);
         dispatch(actions.updateTask(res.data, data.id));
         break;
       case "projects":
         res = await API.editShortProject(data);
-        reAuthCheck(res.status, dispatch);
         dispatch(actions.updateShortProject(res.data, data.id));
         break;
     }
@@ -230,13 +220,12 @@ export const addEventT = (
   header: string,
   body: string,
   img: string,
-  date: string
+  date: string,
+  subject: string
 ) => {
-  const subject = localStorage.subject;
   return async (dispatch: Dispatch<actionType>) => {
     const data: ReceivedPostType = { klass, header, body, img, subject, date };
     const res = await API.addNewEvent(data);
-    reAuthCheck(res.status, dispatch);
     if (!res) {
       return dispatch(actions.statusCodeAC(403));
     }
@@ -245,9 +234,8 @@ export const addEventT = (
     }
   };
 };
-export const getEventT = (page: number) => {
+export const getEventT = (page: number, subject: string) => {
   let klass = localStorage.klass;
-  const subject = localStorage.subject;
   const parallel = localStorage.parallel;
   if (!klass) klass = 0;
   return async (dispatch: any) => {
@@ -264,9 +252,8 @@ export const deleteEventT = (id: string) => {
     dispatch(actions.deleteEventsAC(id));
   };
 };
-export const getEventsWithFilterT = (filter: string) => {
+export const getEventsWithFilterT = (filter: string, subject: string) => {
   let klass = localStorage.klass;
-  const subject = localStorage.subject;
   const parallel = localStorage.parallel;
   if (!klass) klass = 0;
   return async (dispatch: Dispatch<actionType>) => {
@@ -282,9 +269,9 @@ export const addTaskT = (
   header: string,
   body: string,
   img: string,
-  date: string
+  date: string,
+  subject: string
 ) => {
-  const subject = localStorage.subject;
   return async (dispatch: Dispatch<actionType>) => {
     const data = { klass, header, body, img, subject, date };
     const res = await API.addNewTask(data);
@@ -297,9 +284,8 @@ export const addTaskT = (
   };
 };
 
-export const getTaskT = (page: number) => {
+export const getTaskT = (page: number, subject: string) => {
   let klass = localStorage.klass;
-  const subject = localStorage.subject;
   const parallel = localStorage.parallel;
   if (!klass) klass = 0;
   return async (dispatch: Dispatch<actionType>) => {
@@ -316,9 +302,8 @@ export const deleteTaskT = (id: string) => {
     dispatch(actions.deleteTaskAC(id));
   };
 };
-export const getTaskWithFilterT = (filter: string) => {
+export const getTaskWithFilterT = (filter: string, subject: string) => {
   let klass = localStorage.klass;
-  const subject = localStorage.subject;
   const parallel = localStorage.parallel;
   if (!klass) klass = 0;
   return async (dispatch: Dispatch<actionType>) => {
@@ -364,8 +349,7 @@ export type projectType = {
   _id: string;
 };
 
-export const getShortProjectT = (page: number) => {
-  const subject = localStorage.subject;
+export const getShortProjectT = (page: number, subject: string) => {
   return async (dispatch: Dispatch<actionType>) => {
     const res = await API.getShortProject(subject, page);
     dispatch(actions.getShortProjectAC(res.data.projects, res.data.totalCount));
@@ -380,24 +364,25 @@ export const deleteProjectT = (id: string) => {
     dispatch(actions.deleteProjectAC(id));
   };
 };
-export const getShortProjectWithFilterT = (filter: string) => {
-  const subject = localStorage.subject;
+export const getShortProjectWithFilterT = (filter: string, subject: string) => {
   return async (dispatch: Dispatch<actionType>) => {
     const res = await API.getProjectWithFilter(subject, filter);
     dispatch(actions.getShortProjectAC(res.data, res.data.length));
   };
 };
 
-export const getPendingProjectWithFilterT = (filter: string) => {
-  const subject = localStorage.subject;
-  return async (dispatch: Dispatch<actionType>) => {
-    const res = await API.getPendingProjectWithFilter(subject, filter);
-    if (!res) {
-      return dispatch(actions.statusCodeAC(403));
-    }
-    dispatch(actions.getShortProjectAC(res.data, res.data.length));
-  };
-};
+// export const getPendingProjectWithFilterT = (
+//   filter: string,
+//   subject: string
+// ) => {
+//   return async (dispatch: Dispatch<actionType>) => {
+//     const res = await API.getPendingProjectWithFilter(subject, filter);
+//     if (!res) {
+//       return dispatch(actions.statusCodeAC(403));
+//     }
+//     dispatch(actions.getShortProjectAC(res.data, res.data.length));
+//   };
+// };
 
 export type imgArr = {
   imgURL: string;
@@ -413,24 +398,22 @@ export const addProjectT = (data: projectType) => {
   };
 };
 
-export const getProjectT = (id: number) => {
-  const subject = localStorage.subject;
+export const getProjectT = (id: number, subject: string) => {
   return async (dispatch: Dispatch<actionType>) => {
     const res = await API.getProject(subject, id);
     dispatch(actions.getFullProjectAC(...res.data));
   };
 };
 
-export const getPendingProjectT = (page: number) => {
-  const subject = localStorage.subject;
-  return async (dispatch: Dispatch<actionType>) => {
-    const res = await API.getPendingProject(subject, page);
-    if (!res) {
-      return dispatch(actions.statusCodeAC(403));
-    }
-    dispatch(actions.getShortProjectAC(res.data.projects, res.data.totalCount));
-  };
-};
+// export const getPendingProjectT = (page: number, subject: string) => {
+//   return async (dispatch: Dispatch<actionType>) => {
+//     const res = await API.getPendingProject(subject, page);
+//     if (!res) {
+//       return dispatch(actions.statusCodeAC(403));
+//     }
+//     dispatch(actions.getShortProjectAC(res.data.projects, res.data.totalCount));
+//   };
+// };
 
 export const allowProjectT = (id: string) => {
   return async (dispatch: Dispatch<actionType>) => {
@@ -438,7 +421,6 @@ export const allowProjectT = (id: string) => {
     if (!res) {
       return dispatch(actions.statusCodeAC(403));
     }
-    dispatch(actions.deleteProjectAC(res.data));
   };
 };
 
