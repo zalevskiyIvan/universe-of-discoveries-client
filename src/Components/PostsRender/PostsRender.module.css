@@ -12,7 +12,10 @@
   margin-bottom: 5%;
   background-color: white;
 }
-
+.date {
+  margin-left: 40px;
+  font-size: 110%;
+}
 .dots {
   cursor: pointer;
   padding-left: 90%;
@@ -150,6 +153,7 @@ img {
     margin-bottom: 7%;
     margin-top: -50px;
   }
-  .leftButton {
+  .date {
+    font-size: 90%;
   }
 }

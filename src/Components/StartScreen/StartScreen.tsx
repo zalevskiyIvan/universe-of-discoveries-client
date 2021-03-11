@@ -87,7 +87,7 @@ const BigPaper = () => {
                 <h3>Введите пароль:</h3>
                 <Form onFinish={setPassword}>
                   <Form.Item name="password">
-                    <Input />
+                    <Input className={style.input} />
                   </Form.Item>
                 </Form>
               </div>
@@ -145,7 +145,7 @@ export default function StartScreen() {
   }, []);
 
   return (
-    <div>
+    <div className={style.main}>
       <div className={style.smallPaper1} />
       <BigPaper />
       <div className={style.smallPaper2} />

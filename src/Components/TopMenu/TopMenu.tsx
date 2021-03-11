@@ -18,9 +18,9 @@ const Menu = () => {
     dispatch(getEventT(1, params.subject));
     history.push(`/${params.subject}/events`);
   };
-  const links = () => {
-    history.push(`/${params.subject}/links`);
-  };
+  // const links = () => {
+  //   history.push(`/${params.subject}/links`);
+  // };
   const projects = () => {
     dispatch(getShortProjectT(1, params.subject));
     history.push(`/${params.subject}/project`);
@@ -30,7 +30,7 @@ const Menu = () => {
     history.push(`/${params.subject}/tasks`);
   };
 
-  const subject = () => {
+  const pageMenu = () => {
     history.push(`/menu`);
   };
   useEffect(() => {
@@ -61,14 +61,14 @@ const Menu = () => {
             О нас
           </span>
         </li> */}
-        <li className={style.li}>
+        {/* <li className={style.li}>
           <span onClick={links} className={style.a}>
             Полезные ссылки
           </span>
-        </li>
+        </li> */}
         <li className={style.li}>
-          <span onClick={subject} className={style.a}>
-            выбор предмета
+          <span onClick={pageMenu} className={style.a}>
+            К меню
           </span>
         </li>
       </ul>

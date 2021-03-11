@@ -246,7 +246,7 @@ const PostsRender: React.FC<propsType> = (props) => {
                   <Input defaultValue={item.date} />
                 </Form.Item>
               ) : (
-                <h2 style={{ color: "black", marginLeft: 40 }}>{item.date}</h2>
+                <h2 className={style.date}>{item.date}</h2>
               )}
               <div className={style.controllButton}>
                 {isAdmin && !editMode && (

@@ -3,7 +3,6 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 import "antd/dist/antd.css";
 import "./App.css";
 import StartScreen from "./Components/StartScreen/StartScreen";
-import Admins from "./Components/Admins/Admins";
 import Menu from "./Components/TopMenu/TopMenu";
 import AboutUs from "./Components/AboutUs/AboutUs";
 import UserfulLink from "./Components/UsefulLinks/UsefulLinks";
@@ -42,7 +41,6 @@ const App = () => {
               </div>
             )}
           />
-          <Route path="/:subject/admins" render={() => <Admins />} />
           <Route
             path="/:subject/events"
             render={() => (

@@ -50,13 +50,6 @@
   animation: lastToLast 0.7s 1.9s ease backwards;
 }
 
-/* .card:nth-child(4) {
-  margin-left: 23%;
-  margin-top: 440px;
-  animation: adminsToLast 0.7s 1s ease backwards,
-    adminsToSecond 0.7s 2.1s ease forwards;
-} */
-
 @keyframes firstToLast {
   0% {
     margin-left: 36%;
@@ -118,24 +111,89 @@
     margin-top: 240px;
   }
 }
-/* 
-@keyframes adminsToLast {
+
+@media (max-width: 800px) {
+  .card {
+    width: 300px;
+    height: 100px;
+    padding-top: 20px;
+  }
+  .card:nth-child(1) {
+    animation: firstToLast2 0.7s 0s ease forwards,
+      firstToSecond2 0.7s 1.2s ease forwards,
+      firstToFirst2 0.7s 2.1s ease forwards;
+  }
+  .card:nth-child(2) {
+    margin-left: 21%;
+    margin-top: 380px;
+    animation: secondToLast2 0.7s 1s ease backwards,
+      secondToSecond2 0.7s 2.1s ease forwards;
+  }
+  .card:nth-child(3) {
+    margin-left: 5%;
+    margin-top: 357px;
+    animation: lastToLast2 0.7s 1.9s ease backwards;
+  }
+}
+
+@keyframes firstToLast2 {
   0% {
-    margin-left: 23%;
+    margin-left: 5%;
     margin-top: 1000px;
   }
   100% {
-    margin-left: 23%;
-    margin-top: 440px;
+    margin-left: 5%;
+    margin-top: 380px;
   }
 }
-@keyframes adminsToSecond {
+@keyframes secondToLast2 {
   0% {
-    margin-left: 23%;
-    margin-top: 440px;
+    margin-left: 21%;
+    margin-top: 1000px;
   }
   100% {
-    margin-left: 23%;
-    margin-top: 240px;
+    margin-left: 21%;
+    margin-top: 380px;
   }
-} */
+}
+@keyframes firstToSecond2 {
+  0% {
+    margin-left: 5%;
+    margin-top: 380px;
+  }
+  100% {
+    margin-left: 5%;
+    margin-top: 200px;
+  }
+}
+
+@keyframes lastToLast2 {
+  0% {
+    margin-left: 5%;
+    margin-top: 1000px;
+  }
+  100% {
+    margin-left: 5%;
+    margin-top: 357px;
+  }
+}
+@keyframes firstToFirst2 {
+  0% {
+    margin-left: 5%;
+    margin-top: 200px;
+  }
+  100% {
+    margin-left: 5%;
+    margin-top: 50px;
+  }
+}
+@keyframes secondToSecond2 {
+  0% {
+    margin-left: 21%;
+    margin-top: 380px;
+  }
+  100% {
+    margin-left: 21%;
+    margin-top: 200px;
+  }
+}
