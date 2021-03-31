@@ -15,7 +15,7 @@ const Menu = () => {
   const dispatch = useDispatch();
 
   const events = () => {
-    dispatch(getEventT(1, params.subject));
+    dispatch(getEventT(1, params.subject, "common"));
     history.push(`/${params.subject}/events`);
   };
   // const links = () => {

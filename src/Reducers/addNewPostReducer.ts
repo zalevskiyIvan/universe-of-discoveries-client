@@ -234,12 +234,9 @@ export const addEventT = (
     }
   };
 };
-export const getEventT = (page: number, subject: string) => {
-  let klass = localStorage.klass;
-  const parallel = localStorage.parallel;
-  if (!klass) klass = 0;
+export const getEventT = (page: number, subject: string, klass: string) => {
   return async (dispatch: any) => {
-    const res = await API.getEvent(klass, subject, page, parallel);
+    const res = await API.getEvent(klass, subject, page);
     dispatch(actions.getEventsAC(res.data.events, res.data.totalCount));
   };
 };
@@ -252,12 +249,13 @@ export const deleteEventT = (id: string) => {
     dispatch(actions.deleteEventsAC(id));
   };
 };
-export const getEventsWithFilterT = (filter: string, subject: string) => {
-  let klass = localStorage.klass;
-  const parallel = localStorage.parallel;
-  if (!klass) klass = 0;
+export const getEventsWithFilterT = (
+  filter: string,
+  subject: string,
+  klass: string
+) => {
   return async (dispatch: Dispatch<actionType>) => {
-    const res = await API.getEventsWithFilter(klass, subject, filter, parallel);
+    const res = await API.getEventsWithFilter(klass, subject, filter);
     dispatch(actions.getEventsAC(res.data, 1));
   };
 };

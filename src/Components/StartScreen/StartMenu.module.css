@@ -288,10 +288,10 @@
 }
 @media (max-width: 400px) {
   .BigPaper {
-    margin-left: -70%;
+    margin-left: -65%;
   }
 }
-@media (max-width: 370px) {
+@media (max-width: 380px) {
   .BigPaper {
     margin-left: -75%;
   }

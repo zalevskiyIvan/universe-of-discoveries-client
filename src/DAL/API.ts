@@ -28,11 +28,10 @@ export const API = {
   getEvent: (
     klass: string,
     subject: string,
-    page: number,
-    parallel: string
+    page: number
   ): Promise<AxiosResponse<{ events: arrType[]; totalCount: number }>> => {
     return instanse.get(
-      `events?klass=${klass}&subject=${subject}&page=${page}&parallel=${parallel}`
+      `events?klass=${klass}&subject=${subject}&page=${page}`
     );
   },
   deleteEvent: (id: string) => {
@@ -41,11 +40,10 @@ export const API = {
   getEventsWithFilter: (
     klass: string,
     subject: string,
-    filter: string,
-    parallel: string
+    filter: string
   ): Promise<AxiosResponse<arrType[]>> => {
     return instanse.get(
-      `filter-events?klass=${klass}&subject=${subject}&filter=${filter}&parallel=${parallel}`
+      `filter-events?klass=${klass}&subject=${subject}&filter=${filter}`
     );
   },
   editEvents: (data: editPostType) => {

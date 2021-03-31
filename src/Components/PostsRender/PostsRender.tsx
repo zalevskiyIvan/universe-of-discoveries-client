@@ -25,7 +25,7 @@ import {
   PlusOutlined,
   EllipsisOutlined,
 } from "@ant-design/icons";
-import { Button, Dropdown, Form, Input, Menu } from "antd";
+import { Button, Dropdown, Form, Input, Menu, Select } from "antd";
 import {
   editPostType,
   paramsType,
@@ -33,6 +33,7 @@ import {
   re_auth_code,
 } from "../../Common/Common";
 import { useTypedSelector } from "../../Common/hooks";
+import { Option } from "antd/lib/mentions";
 
 type propsType = {
   type: string;
@@ -88,10 +89,13 @@ const PostsRender: React.FC<propsType> = (props) => {
   const pageProject = () => {
     dispatch(getShortProjectT(page, subject));
   };
+
+  const [klass, setKlass] = useState("common");
+
   useEffect(() => {
     switch (props.type) {
       case "events":
-        dispatch(getEventT(page, subject));
+        dispatch(getEventT(page, subject, klass));
         break;
       case "tasks":
         dispatch(getTaskT(page, subject));
@@ -119,7 +123,7 @@ const PostsRender: React.FC<propsType> = (props) => {
           dispatch(getTaskWithFilterT(e.target.value, subject));
           break;
         case "events":
-          dispatch(getEventsWithFilterT(e.target.value, subject));
+          dispatch(getEventsWithFilterT(e.target.value, subject, klass));
           break;
         case "projects":
           dispatch(getShortProjectWithFilterT(e.target.value, subject));
@@ -129,7 +133,7 @@ const PostsRender: React.FC<propsType> = (props) => {
     } else
       switch (props.type) {
         case "events":
-          dispatch(getEventT(page, subject));
+          dispatch(getEventT(page, subject, klass));
           break;
         case "tasks":
           dispatch(getTaskT(page, subject));
@@ -175,7 +179,10 @@ const PostsRender: React.FC<propsType> = (props) => {
     dispatch(editPostT(v, props.type));
     setEditMode(false);
   };
-
+  const selectKlass = (e: string) => {
+    setKlass(e);
+    dispatch(getEventT(page, subject, e));
+  };
   if (!isAdmin)
     state = state.filter((item: responseProject) => item.allowed === true);
   return (
@@ -185,12 +192,23 @@ const PostsRender: React.FC<propsType> = (props) => {
           <PlusOutlined />
         </Button>
       )}
-      <Input
-        className={style.filter}
-        onChange={(e) => addFilter(e)}
-        suffix={<SearchOutlined />}
-        placeholder="искать"
-      />
+      <div>
+        <Input
+          className={style.filter}
+          onChange={(e) => addFilter(e)}
+          suffix={<SearchOutlined />}
+          placeholder="искать"
+        />
+        <Select onChange={selectKlass} defaultValue="common">
+          <Option value="5">5 класс</Option>
+          <Option value="6">6 класс</Option>
+          <Option value="7">7 класс</Option>
+          <Option value="8">8 класс</Option>
+          <Option value="9">9 класс</Option>
+          <Option value="common">общее</Option>
+        </Select>
+      </div>
+
       <div className={style.pagination}>
         {page !== 1 && !filterMod && (
           <LeftOutlined

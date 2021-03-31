@@ -73,7 +73,7 @@ export default function CreatePost() {
   if (isAdmin) {
     return (
       <div className={style.adder}>
-        <Form onFinish={add}>
+        <Form scrollToFirstError onFinish={add}>
           <Form.Item
             rules={[
               {
@@ -88,38 +88,24 @@ export default function CreatePost() {
               placeholder="Введите класс с буквой или просто цифру параллели"
             />
           </Form.Item>
-          {postType === "links" && (
-            <>
-              <Form.Item name="link">
-                <Input placeholder="вставьте ссылку" />
-              </Form.Item>
-              <Form.Item name="description">
-                <Input placeholder="введите описание ссылку" />
-              </Form.Item>
-            </>
-          )}
-          {postType !== "links" && (
-            <>
-              <Form.Item
-                rules={[{ required: true, message: "Введите текст названия" }]}
-                name="header"
-              >
-                <Input placeholder="Введите название поста" />
-              </Form.Item>
-              <Form.Item
-                rules={[{ required: true, message: "Введите текст поста" }]}
-                name="body"
-              >
-                <Input.TextArea placeholder="Введите текст поста" />
-              </Form.Item>
-              <Form.Item name="img">
-                <Input placeholder="Введите ссылку на картинку (не обязательно)" />
-              </Form.Item>
-              <Form.Item name="date">
-                <Input placeholder="Введите дату (не обязательно)" />
-              </Form.Item>
-            </>
-          )}
+          <Form.Item
+            rules={[{ required: true, message: "Введите текст названия" }]}
+            name="header"
+          >
+            <Input placeholder="Введите название поста" />
+          </Form.Item>
+          <Form.Item
+            rules={[{ required: true, message: "Введите текст поста" }]}
+            name="body"
+          >
+            <Input.TextArea placeholder="Введите текст поста" />
+          </Form.Item>
+          <Form.Item name="img">
+            <Input placeholder="Введите ссылку на картинку (не обязательно)" />
+          </Form.Item>
+          <Form.Item name="date">
+            <Input placeholder="Введите дату (не обязательно)" />
+          </Form.Item>
           <Form.Item>
             <Button htmlType="submit">Добавить пост</Button>
           </Form.Item>
