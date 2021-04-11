@@ -36,7 +36,6 @@ const BigPaper = () => {
   }, [page]);
   const [teacherName, setTeacherName] = useState("");
   const logInTeacher = (teacher: string) => {
-    console.log(teacher);
     setTeacherName(teacher);
   };
   const setPassword = ({ password }: any) => {
@@ -87,7 +86,7 @@ const BigPaper = () => {
                 <h3>Введите пароль:</h3>
                 <Form onFinish={setPassword}>
                   <Form.Item name="password">
-                    <Input className={style.input} />
+                    <Input.TextArea className={style.input} />
                   </Form.Item>
                 </Form>
               </div>
