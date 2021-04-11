@@ -8,6 +8,7 @@ const instanse = axios.create({
   headers: {
     "Access-Control-Allow-Origin": "*",
     "Content-Type": "application/json",
+    SameSite: "none",
   },
   withCredentials: true,
 });
@@ -20,10 +21,11 @@ export const API = {
     return instanse.get(`chairs?page=${page}`);
   },
   //              Events
+
   addNewEvent: (
     data: ReceivedPostType
-  ): Promise<AxiosResponse<{ id: string }>> => {
-    return instanse.post("events", data);
+  ): Promise<void | AxiosResponse<{ id: string }>> => {
+    return instanse.post("events", data).catch((e: any) => {});
   },
   getEvent: (
     klass: string,
@@ -35,7 +37,7 @@ export const API = {
     );
   },
   deleteEvent: (id: string) => {
-    return instanse.delete(`events?id=${id}`);
+    return instanse.delete(`events?id=${id}`).catch((e: any) => {});
   },
   getEventsWithFilter: (
     klass: string,
@@ -46,13 +48,13 @@ export const API = {
       `filter-events?klass=${klass}&subject=${subject}&filter=${filter}`
     );
   },
-  editEvents: (data: editPostType) => {
-    return instanse.put("events", data);
+  editEvents: (data: editPostType): any => {
+    return instanse.put("events", data).catch((e: any) => {});
   },
 
   //              Tasks
   addNewTask: (data: ReceivedPostType) => {
-    return instanse.post("tasks", data);
+    return instanse.post("tasks", data).catch((e: any) => {});
   },
   getTask: (
     klass: string,
@@ -65,7 +67,7 @@ export const API = {
     );
   },
   deleteTask: (id: string) => {
-    return instanse.delete(`tasks?id=${id}`);
+    return instanse.delete(`tasks?id=${id}`).catch((e: any) => {});
   },
   editTask: (data: editPostType) => {
     return instanse.put("tasks", data);
@@ -81,23 +83,15 @@ export const API = {
     );
   },
 
-  //              Ulink
-  addNewUsefulLink: (link: string, description: string) => {
-    return instanse.post("links", { link, description });
-  },
-  getUsefulLink: () => {
-    return instanse.get("links");
-  },
-
   //             ShortProjects
   getShortProject: (subject: string, page: number) => {
     return instanse.get(`short-projects?&subject=${subject}&page=${page}`);
   },
   deleteProject: (id: string) => {
-    return instanse.delete(`short-projects?id=${id}`);
+    return instanse.delete(`short-projects?id=${id}`).catch((e: any) => {});
   },
   editShortProject: (data: editPostType) => {
-    return instanse.put("short-projects", data);
+    return instanse.put("short-projects", data).catch((e: any) => {});
   },
   getProjectWithFilter: (subject: string, filter: string) => {
     return instanse.get(
@@ -113,7 +107,7 @@ export const API = {
   //   );
   // },
   allowProject: (id: string) => {
-    return instanse.get(`allow-short-projects?&id=${id}`);
+    return instanse.get(`allow-short-projects?&id=${id}`).catch((e: any) => {});
   },
   // getPendingProjectWithFilter: (subject: string, filter: string) => {
   //   return instanse.get(
@@ -123,7 +117,7 @@ export const API = {
 
   //              FullProjects
   addProject: (body: any) => {
-    return instanse.post("projects", body);
+    return instanse.post("projects", body).catch((e: any) => {});
   },
   getProject: (subject: string, id: number) => {
     return instanse.get(`projects?&subject=${subject}&id=${id}`);
@@ -131,7 +125,10 @@ export const API = {
   editFullProject: (
     data: editFullProjectType
   ): Promise<any | AxiosResponse<{ data: any }>> => {
-    return instanse.put("projects", data).catch((err) => {});
+    return instanse
+      .put("projects", data)
+      .catch((err) => {})
+      .catch((e: any) => {});
   },
 };
 export default API;

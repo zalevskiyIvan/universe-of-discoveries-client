@@ -42,7 +42,7 @@ const addPostReducer = (
     case "GET_EVENTS":
       return {
         ...state,
-        events: action.part.reverse(),
+        events: action.part,
         totalCount: action.totalCount,
       };
     case "DELETE_EVENTS":
@@ -62,7 +62,7 @@ const addPostReducer = (
       return {
         ...state,
         totalCount: action.totalCount,
-        tasks: action.part.reverse(),
+        tasks: action.part,
       };
     case "DELETE_TASK":
       return {
@@ -121,7 +121,7 @@ const addPostReducer = (
     case "GET_USEFUL_LINK":
       return {
         ...state,
-        userfulLinks: action.part.reverse(),
+        userfulLinks: action.part,
       };
     case "STATUS_CODE":
       return {
@@ -188,30 +188,30 @@ export const editPostT = (data: editPostType, typeOfPost: string) => {
     switch (typeOfPost) {
       case "events":
         res = await API.editEvents(data);
-        dispatch(actions.updateEvent(res.data, data.id));
+        res && dispatch(actions.updateEvent(res.data, data.id));
+
         break;
       case "tasks":
         res = await API.editTask(data);
-        dispatch(actions.updateTask(res.data, data.id));
+        res && dispatch(actions.updateTask(res.data, data.id));
         break;
       case "projects":
         res = await API.editShortProject(data);
-        dispatch(actions.updateShortProject(res.data, data.id));
+        res && dispatch(actions.updateShortProject(res.data, data.id));
         break;
     }
-    if (!res) {
-      return dispatch(actions.statusCodeAC(403));
-    }
+
+    !res && dispatch(actions.statusCodeAC(403));
   };
 };
 
 export const editFullProjectT = (data: editFullProjectType) => {
   return async (dispatch: Dispatch<actionType>) => {
     const res = await API.editFullProject(data);
-    if (!res) {
-      return dispatch(actions.statusCodeAC(403));
-    }
-    dispatch(actions.updateFulltProject(res.data, data.id));
+
+    !res && dispatch(actions.statusCodeAC(403));
+
+    res && dispatch(actions.updateFulltProject(res.data, data.id));
   };
 };
 
@@ -226,12 +226,8 @@ export const addEventT = (
   return async (dispatch: Dispatch<actionType>) => {
     const data: ReceivedPostType = { klass, header, body, img, subject, date };
     const res = await API.addNewEvent(data);
-    if (!res) {
-      return dispatch(actions.statusCodeAC(403));
-    }
-    if (res.status === 201) {
-      dispatch(actions.statusCodeAC(res.status));
-    }
+
+    !res && dispatch(actions.statusCodeAC(403));
   };
 };
 export const getEventT = (page: number, subject: string, klass: string) => {
@@ -243,10 +239,10 @@ export const getEventT = (page: number, subject: string, klass: string) => {
 export const deleteEventT = (id: string) => {
   return async (dispatch: Dispatch<actionType>) => {
     const res = await API.deleteEvent(id);
-    if (!res) {
-      return dispatch(actions.statusCodeAC(403));
-    }
-    dispatch(actions.deleteEventsAC(id));
+
+    !res && dispatch(actions.statusCodeAC(403));
+
+    res && dispatch(actions.deleteEventsAC(id));
   };
 };
 export const getEventsWithFilterT = (
@@ -273,12 +269,8 @@ export const addTaskT = (
   return async (dispatch: Dispatch<actionType>) => {
     const data = { klass, header, body, img, subject, date };
     const res = await API.addNewTask(data);
-    if (!res) {
-      return dispatch(actions.statusCodeAC(403));
-    }
-    if (res.status === 201) {
-      dispatch(actions.statusCodeAC(res.status));
-    }
+
+    !res && dispatch(actions.statusCodeAC(403));
   };
 };
 
@@ -294,10 +286,9 @@ export const getTaskT = (page: number, subject: string) => {
 export const deleteTaskT = (id: string) => {
   return async (dispatch: Dispatch<actionType>) => {
     const res = await API.deleteTask(id);
-    if (!res) {
-      return dispatch(actions.statusCodeAC(403));
-    }
-    dispatch(actions.deleteTaskAC(id));
+    !res && dispatch(actions.statusCodeAC(403));
+
+    res && dispatch(actions.deleteTaskAC(id));
   };
 };
 export const getTaskWithFilterT = (filter: string, subject: string) => {
@@ -307,24 +298,6 @@ export const getTaskWithFilterT = (filter: string, subject: string) => {
   return async (dispatch: Dispatch<actionType>) => {
     const res = await API.getTaskWithFilter(klass, subject, filter, parallel);
     dispatch(actions.getTaskAC(res.data, res.data.length));
-  };
-};
-
-//
-
-export const addUsefulLinkT = (link: string, description: string) => {
-  return async (dispatch: Dispatch<actionType>) => {
-    const res = await API.addNewUsefulLink(link, description);
-    if (!res) {
-      return dispatch(actions.statusCodeAC(403));
-    }
-  };
-};
-
-export const getUsefulLinkT = () => {
-  return async (dispatch: Dispatch<actionType>) => {
-    const res = await API.getUsefulLink();
-    dispatch(actions.getUsefulLinkAC(res.data));
   };
 };
 
@@ -356,10 +329,9 @@ export const getShortProjectT = (page: number, subject: string) => {
 export const deleteProjectT = (id: string) => {
   return async (dispatch: Dispatch<actionType>) => {
     const res = await API.deleteProject(id);
-    if (!res) {
-      return dispatch(actions.statusCodeAC(403));
-    }
-    dispatch(actions.deleteProjectAC(id));
+    !res && dispatch(actions.statusCodeAC(403));
+
+    res && dispatch(actions.deleteProjectAC(id));
   };
 };
 export const getShortProjectWithFilterT = (filter: string, subject: string) => {
@@ -390,9 +362,7 @@ export type imgArr = {
 export const addProjectT = (data: projectType) => {
   return async (dispatch: Dispatch<actionType>) => {
     const res = await API.addProject(data);
-    if (!res) {
-      return dispatch(actions.statusCodeAC(403));
-    }
+    !res && dispatch(actions.statusCodeAC(403));
   };
 };
 
@@ -416,9 +386,7 @@ export const getProjectT = (id: number, subject: string) => {
 export const allowProjectT = (id: string) => {
   return async (dispatch: Dispatch<actionType>) => {
     const res = await API.allowProject(id);
-    if (!res) {
-      return dispatch(actions.statusCodeAC(403));
-    }
+    !res && dispatch(actions.statusCodeAC(403));
   };
 };
 

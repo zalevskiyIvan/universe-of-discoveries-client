@@ -57,9 +57,6 @@ const PostsRender: React.FC<propsType> = (props) => {
         return state.addPostReducer.shortProjects;
     }
   });
-  const statusCode = useTypedSelector(
-    (state) => state.addPostReducer.statusCode
-  );
   const totalPostCount = useTypedSelector(
     (state) => state.addPostReducer.totalCount
   );
@@ -69,12 +66,7 @@ const PostsRender: React.FC<propsType> = (props) => {
       history.push(`/${subject}/project/${id}`);
     }
   };
-  const re_authorization = () => {
-    if (statusCode === re_auth_code) {
-      localStorage.clear();
-      history.push("/");
-    }
-  };
+
   const [page, setPage] = useState(1);
   useEffect(() => {
     setPage(1);
@@ -148,16 +140,12 @@ const PostsRender: React.FC<propsType> = (props) => {
     switch (props.type) {
       case "events":
         dispatch(deleteEventT(id));
-        re_authorization();
-
         break;
       case "tasks":
         dispatch(deleteTaskT(id));
-        re_authorization();
         break;
       case "projects":
         dispatch(deleteProjectT(id));
-        re_authorization();
         break;
     }
   };
@@ -183,8 +171,10 @@ const PostsRender: React.FC<propsType> = (props) => {
     setKlass(e);
     dispatch(getEventT(page, subject, e));
   };
-  if (!isAdmin)
+  if (!isAdmin && props.type === "projects") {
     state = state.filter((item: responseProject) => item.allowed === true);
+  }
+
   return (
     <div className={style.main}>
       {(isAdmin || props.type === "projects") && (
@@ -226,6 +216,7 @@ const PostsRender: React.FC<propsType> = (props) => {
         )}
       </div>
       {state.map((item: any) => {
+        debugger;
         const menu = (
           <Menu style={{ width: 200 }}>
             <Menu.Item>
