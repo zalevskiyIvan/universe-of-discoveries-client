@@ -11,7 +11,7 @@ import { useTypedSelector } from "../../Common/hooks";
 import { actions } from "../../Reducers/addNewPostReducer";
 import { getChairT } from "../../Reducers/cheirsReducer";
 import style from "./StartMenu.module.css";
-import { Form, Input } from "antd";
+import { Button, Form, Input } from "antd";
 import { getTokenT } from "../../Reducers/autorizetReducer";
 
 const BigPaper = () => {
@@ -85,9 +85,15 @@ const BigPaper = () => {
               <div>
                 <h3>Введите пароль:</h3>
                 <Form onFinish={setPassword}>
-                  <Form.Item name="password">
-                    <Input.TextArea className={style.input} />
-                  </Form.Item>
+                  <div className={style.form}>
+                    <Form.Item name="password">
+                      <Input.TextArea
+                        autoSize={{ minRows: 1, maxRows: 1 }}
+                        className={style.input}
+                      />
+                    </Form.Item>
+                    <Button htmlType="submit">Войти</Button>
+                  </div>
                 </Form>
               </div>
             )}
@@ -145,9 +151,13 @@ export default function StartScreen() {
 
   return (
     <div className={style.main}>
-      <div className={style.smallPaper1} />
+      <div className={style.smallPaper1}>
+        <h2>Чтобы войти как учитель нужно нажать на свое имя</h2>
+      </div>
       <BigPaper />
-      <div className={style.smallPaper2} />
+      <div className={style.smallPaper2}>
+        <h2>Посты можно добавлять только через яндекс</h2>
+      </div>
       <div className={style.smallPaper3} />
       <div className={style.smallPaper4} />
       <div className={style.smallPaper5} />

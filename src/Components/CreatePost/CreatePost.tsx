@@ -1,11 +1,12 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addEventT, addTaskT } from "../../Reducers/addNewPostReducer";
-import { Button, Divider, Form, Input } from "antd";
+import { Button, Divider, Form, Input, Select } from "antd";
 import style from "./CreatePost.module.css";
 import { useHistory, useLocation, useParams } from "react-router-dom";
 import { paramsType } from "../../Common/Common";
 import { useTypedSelector } from "../../Common/hooks";
+import { Option } from "antd/lib/mentions";
 //
 export default function CreatePost() {
   const dispatch = useDispatch();
@@ -62,8 +63,16 @@ export default function CreatePost() {
           ]}
           name="klass"
         >
-          <Input allowClear placeholder="Введите класс цифрой" />
+          <Select defaultValue="common">
+            <Option value="5">5 класс</Option>
+            <Option value="6">6 класс</Option>
+            <Option value="7">7 класс</Option>
+            <Option value="8">8 класс</Option>
+            <Option value="9">9 класс</Option>
+            <Option value="common">общее</Option>
+          </Select>
         </Form.Item>
+
         <Form.Item
           rules={[{ required: true, message: "Введите текст названия" }]}
           name="header"

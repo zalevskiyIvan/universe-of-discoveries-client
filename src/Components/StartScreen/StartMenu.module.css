@@ -11,7 +11,7 @@
   height: 1280px;
   background-image: url("../../Common/img/kipa_bumag.png");
   background-repeat: no-repeat;
-  margin-top: -250px;
+  margin-top: -260px;
   padding-left: 10px;
   margin-left: 30%;
   z-index: 2;
@@ -42,6 +42,9 @@
   width: 380px;
   animation: fade-in 0.3s linear 0.6s normal backwards;
 }
+.form {
+  display: flex;
+}
 .input {
   width: 300px;
 }
@@ -54,8 +57,6 @@
   font-size: 40px;
 }
 
-.smallPaper1,
-.smallPaper2,
 .smallPaper3,
 .smallPaper4,
 .smallPaper5 {
@@ -67,13 +68,27 @@
   box-shadow: 0.4em 0.4em 5px rgba(122, 122, 122, 0.5);
   z-index: 1;
 }
+.smallPaper1,
+.smallPaper2 {
+  position: absolute;
+  width: 280px;
+  height: 350px;
+  background-image: url("../../Common/img/smallPaperWithInfo.png");
+  background-repeat: no-repeat;
+  box-shadow: 0.4em 0.4em 5px rgba(122, 122, 122, 0.5);
+  z-index: 1;
+}
 .smallPaper1 {
   animation: smallPTranslate 1s ease;
   transform: translate(40%, 10%);
+  text-align: center;
+  padding-top: 1%;
 }
 .smallPaper2 {
   animation: smallPTranslate2 1s ease;
   transform: translate(70%, 90%);
+  text-align: center;
+  padding-top: 1%;
 }
 .smallPaper3 {
   animation: smallPTranslate3 1s ease;
