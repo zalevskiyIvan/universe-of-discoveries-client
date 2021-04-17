@@ -155,9 +155,7 @@ export default function StartScreen() {
         <h2>Чтобы войти как учитель нужно нажать на свое имя</h2>
       </div>
       <BigPaper />
-      <div className={style.smallPaper2}>
-        <h2>Посты можно добавлять только через яндекс</h2>
-      </div>
+      <div className={style.smallPaper2} />
       <div className={style.smallPaper3} />
       <div className={style.smallPaper4} />
       <div className={style.smallPaper5} />

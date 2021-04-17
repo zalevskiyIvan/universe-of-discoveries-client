@@ -59,7 +59,8 @@
 
 .smallPaper3,
 .smallPaper4,
-.smallPaper5 {
+.smallPaper5,
+.smallPaper2 {
   position: absolute;
   width: 280px;
   height: 350px;
@@ -68,8 +69,7 @@
   box-shadow: 0.4em 0.4em 5px rgba(122, 122, 122, 0.5);
   z-index: 1;
 }
-.smallPaper1,
-.smallPaper2 {
+.smallPaper1 {
   position: absolute;
   width: 280px;
   height: 350px;
